@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Alexandra Crudu](https://up.htmlacademy.ru/ecmascript/14/user/1342439).
-* Наставник: `Неизвестно`.
+* Наставник: [Юлия Корецкая](https://htmlacademy.ru/profile/id11886).
 
 ---
 
