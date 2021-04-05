@@ -5,7 +5,7 @@ import {createFilmsList} from './view/films';
 import {createShowMoreButton} from './view/show-more-button';
 import {createTopRatedFilmsTemplate} from './view/top-rated-films';
 import {createMostCommentedFilmsTemplate} from './view/most-commented-films';
-import {createFilmDetailsPopupTemplate} from './view/film-popup';
+// import {createFilmDetailsPopupTemplate} from './view/film-popup';
 import {createAllFilmsTemplete} from './view/all-films';
 import {filmCardTemplate} from './view/film-card';
 
@@ -28,14 +28,14 @@ const filmCardContainer = films.querySelector('.films-list__container');
 const filmCards= 5;
 
 for(let i=0; i< filmCards; i++) {
-  render(filmCardContainer, filmCardTemplate(), 'beforeend')
+  render(filmCardContainer, filmCardTemplate(), 'beforeend');
 }
 
 render(films, createShowMoreButton(), 'beforeend');
 render(siteMain, createTopRatedFilmsTemplate(), 'beforeend');
 render(siteMain, createMostCommentedFilmsTemplate(), 'beforeend');
 
-const siteBody = document.querySelector('body');
+// const siteBody = document.querySelector('body');
 
 
 // render(siteBody, createFilmDetailsPopupTemplate(), 'beforeend');

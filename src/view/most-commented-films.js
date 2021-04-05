@@ -39,5 +39,5 @@ export const createMostCommentedFilmsTemplate = () => {
       </div>
     </article>
   </div>
-</section>`
+</section>`;
 };
