@@ -78,7 +78,7 @@ filmItems.forEach((film, index) => {
 
   film.addEventListener('click', (evt) => {
     evt.preventDefault();
-    renderElement(siteBody,new FilmPopup().getElement(films[index]));
+    siteBody.appendChild(new FilmPopup().getElement(films[index]));
 
     const filmPopup = siteBody.querySelector('.film-details');
 
@@ -87,7 +87,7 @@ filmItems.forEach((film, index) => {
 
     closePopUpButton.addEventListener('click', (evt) => {
       evt.preventDefault();
-      filmPopup.remove();
+      siteBody.removeChild(filmPopup);
     });
   });
 
