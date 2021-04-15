@@ -134,7 +134,7 @@ const generateActors = () => {
     actors.add(getRandomIndex(filmActors));
   }
 
-  return Array.from(actors).join('');
+  return Array.from(actors);
 };
 
 const country = [

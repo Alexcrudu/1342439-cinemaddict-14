@@ -1,7 +1,7 @@
 import {createElement} from '../utils.js';
 
 const createFilmDetailsPopupTemplate = (film) => {
-  const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actor, date, country, rating, duration, description, comments} = film;
+  const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments} = film;
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -39,7 +39,7 @@ const createFilmDetailsPopupTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actor}</td>
+              <td class="film-details__cell">${actors.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
