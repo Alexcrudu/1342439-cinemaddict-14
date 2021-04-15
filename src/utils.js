@@ -10,3 +10,19 @@ export const getRandomIndex = function (list) {
 
   return list[randomIndex];
 };
+
+export const renderTemplate = (container, template) => {
+  container.insertAdjacentHTML('beforeend', template);
+};
+
+export const renderElement = (container, element) => {
+  container.append(element);
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML= template;
+
+  return newElement.firstChild;
+};
+

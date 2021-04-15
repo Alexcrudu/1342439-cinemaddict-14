@@ -160,10 +160,8 @@ export const generateFilmCard = () => {
     description: generateDescription(),
     comments: generateFilmComments(),
     actors: generateActors(),
-    release: {
-      date: 'date',
-      coutry: getRandomIndex(country),
-    },
+    date: 'date',
+    coutry: getRandomIndex(country),
     runtime: getRandomInteger(0, MAX_RUNTIME),
     isWishList: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
