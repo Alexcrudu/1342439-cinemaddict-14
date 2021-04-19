@@ -194,4 +194,12 @@ export default class FilmPopup {
   removeElement() {
     this._element = null;
   }
+
+  openElement(container, element) {
+    container.appendChild(this.getElement(element));
+  }
+
+  closeElement(container, element) {
+    container.removeChild(this.getElement(element));
+  }
 }

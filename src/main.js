@@ -12,9 +12,12 @@ import {generateFilmCard} from './mock/film-card';
 // import {generateFilmComments} from './mock/comments.js';
 import {renderElement} from './utils.js';
 import FilmPopup from './view/film-popup.js';
+import NoFilms from './view/no-films.js';
 
 const FILMS_COUNT = 22;
 const FILMS_COUNT_PER_STEP = 5;
+const ESC = 'Escape';
+const siteBody = document.querySelector('body');
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
 
@@ -28,6 +31,10 @@ renderElement(siteMain, new SiteMenuView().getElement(films));
 renderElement(siteMain, new MainSort().getElement());
 renderElement(siteMain, new FilmsList().getElement());
 
+if(films.length === 0) {
+  renderElement(siteMain, new NoFilms().getElement());
+}
+
 const filmsList = siteMain.querySelector('.films');
 const filmCardContainer = filmsList.querySelector('.films-list__container');
 
@@ -35,6 +42,32 @@ for(let i=0; i< Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
   films[i].index = i;
   const newFilmItem =new FilmCardItem().getElement(films[i]);
   renderElement(filmCardContainer, newFilmItem);
+
+  newFilmItem.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    const filmPopupClass = new FilmPopup;
+    filmPopupClass.openElement(siteBody, films[i]);
+
+    const filmPopup = siteBody.querySelector('.film-details');
+
+
+    const closePopUpButton = document.querySelector('.film-details__close-btn');
+
+    const removePopup = function () {
+      filmPopupClass.closeElement(siteBody, filmPopup);
+    };
+
+    closePopUpButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      removePopup();
+    });
+
+    siteBody.addEventListener('keydown', (evt) => {
+      if (evt.key === ESC) {
+        removePopup();
+      }
+    });
+  });
 }
 
 if (films.length > FILMS_COUNT_PER_STEP) {
@@ -60,43 +93,8 @@ if (films.length > FILMS_COUNT_PER_STEP) {
   });
 }
 
-renderElement(siteMain, new TopRated().getElement);
+renderElement(siteMain, new TopRated().getElement());
 renderElement(siteMain, new MostCommented().getElement());
-
-const siteBody = document.querySelector('body');
-
-const filmItems = Array.from(filmCardContainer.querySelectorAll('.film-card'));
-
-// const renderPopup = (item) => {
-//   renderElement(siteBody,new FilmPopup().getElement(item));
-// };
-
-filmItems.forEach((film, index) => {
-  film.dataset.index= index;
-
-  // const renderPopup = renderElement(siteBody,new FilmPopup().getElement(films[index]));
-
-  film.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    siteBody.appendChild(new FilmPopup().getElement(films[index]));
-
-    const filmPopup = siteBody.querySelector('.film-details');
-
-
-    const closePopUpButton = filmPopup.querySelector('.film-details__close-btn');
-
-    closePopUpButton.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      siteBody.removeChild(filmPopup);
-    });
-  });
-
-});
-
-
-// for(let i=0; i< FILMS_COUNT; i++) {
-//   render(siteBody, createFilmDetailsPopupTemplate(films[i]), 'beforeend');
-// }
 
 
 const siteFooter = document.querySelector('.footer');
