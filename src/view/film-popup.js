@@ -1,5 +1,7 @@
-export const createFilmDetailsPopupTemplate = (film) => {
-  const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actor, release, rating, duration, description, comments} = film;
+import {createElement} from '../utils.js';
+
+const createFilmDetailsPopupTemplate = (film) => {
+  const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments} = film;
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -37,11 +39,11 @@ export const createFilmDetailsPopupTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actor}</td>
+              <td class="film-details__cell">${actors.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${release.date}3</td>
+              <td class="film-details__cell">${date}3</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -49,7 +51,7 @@ export const createFilmDetailsPopupTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.country}</td>
+              <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
@@ -80,7 +82,7 @@ export const createFilmDetailsPopupTemplate = (film) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.lenth}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
           <li class="film-details__comment">
@@ -171,3 +173,33 @@ export const createFilmDetailsPopupTemplate = (film) => {
   </form>
 </section>`;
 };
+
+export default class FilmPopup {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(film) {
+    return createFilmDetailsPopupTemplate(film);
+  }
+
+  getElement(film) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(film));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  openElement(container, element) {
+    container.appendChild(this.getElement(element));
+  }
+
+  closeElement(container, element) {
+    container.removeChild(this.getElement(element));
+  }
+}

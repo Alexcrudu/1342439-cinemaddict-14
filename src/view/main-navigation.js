@@ -1,4 +1,6 @@
-export const createMainNavigationTemplate = (films) => {
+import {createElement} from '../utils.js';
+
+const createMainNavigationTemplate = (films) => {
 
   const favoriteFilms = () => {
     const filtredFilms = Array.from(films.filter((film) => film.isFavorite));
@@ -25,3 +27,24 @@ export const createMainNavigationTemplate = (films) => {
   <a href="#stats" class="main-navigation__additional">Stats</a>
 </nav>`;
 };
+
+export default class SiteMenu {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(films) {
+    return createMainNavigationTemplate(films);
+  }
+
+  getElement(films) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(films));
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

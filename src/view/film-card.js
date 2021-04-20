@@ -1,4 +1,6 @@
-export const filmCardTemplate = (film) => {
+import {createElement} from '../utils.js';
+
+const filmCardTemplate = (film) => {
   const {poster, filmName, rating, year, duration, genre, description, comments, isWishList, isWatched, isFavorite} = film;
 
   const isWishListClassName = isWishList ? 'checked' : '';
@@ -7,7 +9,7 @@ export const filmCardTemplate = (film) => {
 
   const isFavoriteListClassName = isFavorite ? 'checked' : '';
 
-  return `<article class="film-card">
+  return `<article class="film-card" data-index="${film.index}">
   <h3 class="film-card__title">${filmName}</h3>
   <p class="film-card__rating">${rating}</p>
   <p class="film-card__info">
@@ -25,3 +27,26 @@ export const filmCardTemplate = (film) => {
   </div>
 </article>`;
 };
+
+export default class FilmCardItem {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(film) {
+    return filmCardTemplate(film);
+  }
+
+  getElement(film) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(film));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
