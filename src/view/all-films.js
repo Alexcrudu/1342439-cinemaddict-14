@@ -1,18 +1,14 @@
 import {createElement} from '../utils.js';
 
-const createAllFilmsTemplete = () => {
-  return `<section class="footer__statistics">
-  <p>130 291 movies inside</p>
-</section>`;
-};
-
 export default class AllFilms {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createAllFilmsTemplete();
+    return  `<section class="footer__statistics">
+    <p>130 291 movies inside</p>
+  </section>`;
   }
 
   getElement() {
