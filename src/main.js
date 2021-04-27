@@ -27,7 +27,7 @@ renderElement(siteHeader, new UserNameView().getElement());
 
 const siteMain = document.querySelector('.main');
 
-renderElement(siteMain, new SiteMenuView().getElement(films));
+renderElement(siteMain, new SiteMenuView(films).getElement());
 renderElement(siteMain, new MainSort().getElement());
 renderElement(siteMain, new FilmsList().getElement());
 
@@ -40,30 +40,21 @@ const filmCardContainer = filmsList.querySelector('.films-list__container');
 
 for (let i = 0; i < Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
   films[i].index = i;
-  const newFilmItem = new FilmCardItem().getElement(films[i]);
-  renderElement(filmCardContainer, newFilmItem);
+  const newFilmItem = new FilmCardItem(films[i]);
+  renderElement(filmCardContainer, newFilmItem.getElement());
 
-  newFilmItem.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    const filmPopupClass = new FilmPopup();
-    filmPopupClass.openElement(siteBody, films[i]);
+  const filmPopupClass = new FilmPopup(films[i]);
 
-    const filmPopup = siteBody.querySelector('.film-details');
+  newFilmItem.setClickHandler(() => {
+    filmPopupClass.openElement(siteBody);
 
-    const closePopUpButton = document.querySelector('.film-details__close-btn');
-
-    const removePopup = function () {
-      filmPopupClass.closeElement(siteBody, filmPopup);
-    };
-
-    closePopUpButton.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      removePopup();
+    filmPopupClass.setClickHandler(() => {
+      filmPopupClass.closeElement(siteBody);
     });
 
     siteBody.addEventListener('keydown', (evt) => {
       if (evt.key === ESC) {
-        removePopup();
+        filmPopupClass.closeElement(siteBody);
       }
     });
   });
@@ -72,41 +63,29 @@ for (let i = 0; i < Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
 
 if (films.length > FILMS_COUNT_PER_STEP) {
   let renderedFilmCount = FILMS_COUNT_PER_STEP;
-  const showMoreButton = new ShowMoreFilmsButton().getElement();
+  const showMoreButton = new ShowMoreFilmsButton();
+  renderElement(filmsList, showMoreButton.getElement());
 
-  renderElement(filmsList, showMoreButton);
-
-  showMoreButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  showMoreButton.setClickHandler(() => {
 
     films
       .slice(renderedFilmCount, renderedFilmCount + FILMS_COUNT_PER_STEP)
       .forEach((film, index) => {
         film.index = index;
-        const showMoreNewFilmItem = new FilmCardItem().getElement(film);
-        renderElement(filmCardContainer, showMoreNewFilmItem);
+        const showMoreNewFilmItem = new FilmCardItem(film);
+        renderElement(filmCardContainer, showMoreNewFilmItem.getElement());
 
-        showMoreNewFilmItem.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          const filmPopupClass = new FilmPopup();
-          filmPopupClass.openElement(siteBody, film);
+        showMoreNewFilmItem.setClickHandler(() => {
+          const filmPopupClass = new FilmPopup(film);
+          filmPopupClass.openElement(siteBody);
 
-          const filmPopup = siteBody.querySelector('.film-details');
-
-          const closePopUpButton = document.querySelector('.film-details__close-btn');
-
-          const removePopup = function () {
-            filmPopupClass.closeElement(siteBody, filmPopup);
-          };
-
-          closePopUpButton.addEventListener('click', (evt) => {
-            evt.preventDefault();
-            removePopup();
+          filmPopupClass.setClickHandler(() => {
+            filmPopupClass.closeElement(siteBody);
           });
 
           siteBody.addEventListener('keydown', (evt) => {
             if (evt.key === ESC) {
-              removePopup();
+              filmPopupClass.closeElement(siteBody);
             }
           });
         });
