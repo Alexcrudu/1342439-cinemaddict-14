@@ -1,23 +1,24 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
-export default class SiteMenu {
-  constructor() {
-    this._element = null;
+export default class SiteMenu extends AbstractView {
+  constructor(films) {
+    super();
+    this._films = films;
   }
 
-  getTemplate(films) {
+  getTemplate() {
     const favoriteFilms = () => {
-      const filtredFilms = Array.from(films.filter((film) => film.isFavorite));
+      const filtredFilms = Array.from(this._films.filter((film) => film.isFavorite));
       return filtredFilms;
     };
 
     const watchedFilms = () => {
-      const filtredWatchedFilms = Array.from(films.filter((film) => film.isWatched));
+      const filtredWatchedFilms = Array.from(this._films.filter((film) => film.isWatched));
       return filtredWatchedFilms;
     };
 
     const wishedFilms = () => {
-      const wishedFilms = Array.from(films.filter((film) => film.isWishList));
+      const wishedFilms = Array.from(this._films.filter((film) => film.isWishList));
       return wishedFilms;
     };
 
@@ -30,16 +31,5 @@ export default class SiteMenu {
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
-  }
-
-  getElement(films) {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(films));
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
