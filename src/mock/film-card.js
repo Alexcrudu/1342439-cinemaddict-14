@@ -1,6 +1,7 @@
 import {getRandomInteger} from '../utils.js';
 import {getRandomIndex} from '../utils.js';
 import {generateFilmComments} from './comments.js';
+import { nanoid } from 'nanoid';
 
 const MIN_YEAR = 1980;
 const MAX_YEAR = 2020;
@@ -147,6 +148,7 @@ const country = [
 
 export const generateFilmCard = () => {
   return {
+    id: nanoid(),
     poster: getRandomIndex(posters),
     filmName: getRandomIndex(filmsTitle),
     alternativeFilmName: getRandomIndex(filmsTitle),

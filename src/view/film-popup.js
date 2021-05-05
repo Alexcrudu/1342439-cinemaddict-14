@@ -4,7 +4,8 @@ export default class FilmPopup extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
-    this._clickHandler = this._clickHandler.bind(this);
+    this._eventHandler = this._eventHandler.bind(this);
+    this._container = document.querySelector('body');
   }
 
   getTemplate() {
@@ -181,21 +182,29 @@ export default class FilmPopup extends AbstractView {
 </section>`;
   }
 
-  _clickHandler(evt) {
+  _eventHandler(evt) {
     evt.preventDefault();
-    this._callback();
+    if (evt.key && evt.key === 'Escape') {
+      this._callback();
+    } else {
+      this._callback();
+    }
   }
 
   setClickHandler(callback) {
     this._callback = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+    const el = this.getElement().querySelector('.film-details__close-btn');
+    el.addEventListener('click', this._eventHandler);
+    this._container.addEventListener('keydown', this._eventHandler);
   }
 
-  openElement(container) {
-    container.appendChild(this.getElement());
+  openElement() {
+    this._container.appendChild(this.getElement());
   }
 
-  closeElement(container) {
-    container.removeChild(this.getElement());
+  closeElement() {
+    const el = this.getElement();
+    this._container.removeChild(el);
+    this._container.removeEventListener('keydown', this._eventHandler);
   }
 }
