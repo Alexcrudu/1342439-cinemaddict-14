@@ -29,6 +29,7 @@ export default class Board {
     this._mostCommentedComponent = new MostCommentedView();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    // this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
@@ -39,6 +40,7 @@ export default class Board {
 
   }
 
+
   _renderSiteList () {
     renderElement(this._boardContainer, this._siteListComponent.getElement());
   }
@@ -48,14 +50,11 @@ export default class Board {
     renderElement(this._boardContainer, this._siteMenuComponent.getElement());
   }
 
+
   _renderNoFilms(){
     renderElement(this._boardContainer, this._noComponent.getElement());
   }
 
-  // _renderPopup(film) {
-  //   this._filmPopupComponent = new FilmPopupView(film);
-  //   renderElement(this._boardContainer, this._filmPopupComponent.getElement());
-  // }
 
   _renderFilm(film) {
     this._film = film;
@@ -64,12 +63,21 @@ export default class Board {
     renderElement(filmCardContainer, this._newFilmItem.getElement());
     this._renderedFilmList[this._film.id] = this._newFilmItem;
 
-
     this._setEventListeners(this._newFilmItem);
+    // this._newFilmItem.setWatchListClickHandler(this._handleIsWatchedClick);
+  }
+
+  _renderFilms(from, to) {
+    const filmsListSlice = this._films.slice(from, to);
+    filmsListSlice.forEach((film, index) => {
+      film.index = index;
+      this._renderFilm(film, index);
+    });
   }
 
   _setEventListeners (renderedFilm){
     renderedFilm.setClickHandlerPoster((callbackFilm) => {
+
       this._filmPopupComponent = new FilmPopupView(callbackFilm);
       this._filmPopupComponent.openElement();
 
@@ -77,29 +85,36 @@ export default class Board {
         this._filmPopupComponent.closeElement();
       });
     });
+
+    renderedFilm.setWatchListClickHandler((renderedFilm) => {
+      this._handleFilmChange(
+        Object.assign(
+          {},
+          renderedFilm, { isWatched: !renderedFilm.isWatched},
+        ),
+      );
+    },
+    );
   }
 
-  _handleFilmChange(updatedFilm) {
-    this._films = updateItem(this._films, updatedFilm);
-    this._renderedFilmList[updatedFilm.id];
-    this._renderFilm(updatedFilm);
+  _handleFilmChange(renderedFilm) {
+    // console.log(this._films, this._renderedFilmList);
+    // debugger
+    this._films = updateItem(this._films, renderedFilm);
+    this._renderedFilmList[renderedFilm.id] = this._renderFilm(renderedFilm);
+    console.log(this._films, this._renderedFilmList);
+
   }
 
-
-  _renderFilms(from, to) {
-    this._films.slice(from, to).forEach((film, index) => {
-      film.index = index;
-      this._renderFilm(film, index);
-    });
-  }
-
-  // _handleFilmChange(updatedFilm) {
-  //   this._films = updateItem(this._films, updatedFilm);
-  //   this._renderedFilmList[updatedFilm.id];
-  //   this._renderFilm(updatedFilm);
-  //   console.log(this._renderedFilmList[updatedFilm.id]);
-  //   console.log(this._renderFilm(this._films[2]));
+  // _handleIsWatchedClick() {
+  //   this._handleFilmChange(
+  //     Object.assign(
+  //       {},
+  //       film, { isWatched: !film.isWatched},
+  //     ),
+  //   );
   // }
+
 
   _handleShowMoreButtonClick() {
 
