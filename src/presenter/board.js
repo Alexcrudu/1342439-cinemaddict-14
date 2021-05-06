@@ -21,7 +21,6 @@ export default class Board {
 
 
     this._noComponent = new NoFilmsView();
-    // this._siteMenuComponent = new SiteMenuView();
     this._sortComponent = new MainSortView();
     this._siteListComponent = new FilmsListView();
     this._showMoreButtonComponent = new ShowMoreFilmsButtonView();
@@ -29,12 +28,12 @@ export default class Board {
     this._mostCommentedComponent = new MostCommentedView();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
-    // this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
+    this._siteMenuComponent = new SiteMenuView(this._films);
     this._renderBoard();
 
 
@@ -46,8 +45,8 @@ export default class Board {
   }
 
   _renderSiteMenu(){
-    this._siteMenuComponent = new SiteMenuView(this._films);
-    renderElement(this._boardContainer, this._siteMenuComponent.getElement());
+    const template = this._siteMenuComponent.getElement();
+    renderElement(this._boardContainer, template);
   }
 
 
@@ -64,16 +63,10 @@ export default class Board {
     this._renderedFilmList[this._film.id] = this._newFilmItem;
 
     this._setEventListeners(this._newFilmItem);
-    // this._newFilmItem.setWatchListClickHandler(this._handleIsWatchedClick);
+    return this._newFilmItem;
+
   }
 
-  _renderFilms(from, to) {
-    const filmsListSlice = this._films.slice(from, to);
-    filmsListSlice.forEach((film, index) => {
-      film.index = index;
-      this._renderFilm(film, index);
-    });
-  }
 
   _setEventListeners (renderedFilm){
     renderedFilm.setClickHandlerPoster((callbackFilm) => {
@@ -98,33 +91,24 @@ export default class Board {
   }
 
   _handleFilmChange(renderedFilm) {
-    // console.log(this._films, this._renderedFilmList);
-    // debugger
     this._films = updateItem(this._films, renderedFilm);
-    this._renderedFilmList[renderedFilm.id] = this._renderFilm(renderedFilm);
-    console.log(this._films, this._renderedFilmList);
-
+    this._clearFilmList();
+    this._renderedFilmCount = FILMS_COUNT_PER_STEP;
+    this._renderFilms(0, this._renderedFilmCount);
+    debugger
+    this._siteMenuComponent = new SiteMenuView(this._films);
+    this._renderSiteMenu();
   }
 
-  // _handleIsWatchedClick() {
-  //   this._handleFilmChange(
-  //     Object.assign(
-  //       {},
-  //       film, { isWatched: !film.isWatched},
-  //     ),
-  //   );
-  // }
 
-
-  _handleShowMoreButtonClick() {
-
-    this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP);
-    this._renderedFilmCount += FILMS_COUNT_PER_STEP;
-
-    if (this._renderedFilmCount >= this._films.length) {
-      remove(this._showMoreButtonComponent);
-    }
+  _renderFilms(from, to) {
+    const filmsListSlice = this._films.slice(from, to);
+    filmsListSlice.forEach((film, index) => {
+      film.index = index;
+      this._renderFilm(film, index);
+    });
   }
+
 
   _renderShowMoreButton () {
     renderElement(this._boardContainer, this._showMoreButtonComponent.getElement());
@@ -151,7 +135,16 @@ export default class Board {
     test.forEach((film) => remove(film));
     this._renderedFilmList = {};
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
-    remove(this._showMoreButtonComponent);
+  }
+
+  _handleShowMoreButtonClick() {
+
+    this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP, this._films);
+    this._renderedFilmCount += FILMS_COUNT_PER_STEP;
+
+    if (this._renderedFilmCount >= this._films.length) {
+      remove(this._showMoreButtonComponent);
+    }
   }
 
   _renderBoard(){
@@ -164,10 +157,11 @@ export default class Board {
 
 
     if(this._films.length === 0) {
+      remove(this._showMoreButtonComponent);
       this._renderNoFilms();
     }
 
-    this._renderFilms(0, Math.min(this._films.length, FILMS_COUNT_PER_STEP));
+    this._renderFilms(0, Math.min(this._films.length, FILMS_COUNT_PER_STEP), this._films);
 
 
     if(this._films.length > FILMS_COUNT_PER_STEP){

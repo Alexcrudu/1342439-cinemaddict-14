@@ -15,11 +15,11 @@ export default class FilmCardItem extends AbstractView {
   getTemplate() {
     const {poster, filmName, rating, year, duration, genre, description, comments, isWishList, isWatched, isFavorite} = this._film;
 
-    const isWishListClassName = isWishList ? 'checked' : '';
+    const isWishListClassName = isWishList ? 'film-card__controls-item--active' : '';
 
-    const isWatchedListClassName = isWatched ? 'checked' : '';
+    const isWatchedListClassName = isWatched ? 'film-card__controls-item--active' : '';
 
-    const isFavoriteListClassName = isFavorite ? 'checked' : '';
+    const isFavoriteListClassName = isFavorite ? 'film-card__controls-item--active' : '';
 
     return `<article class="film-card" data-index="${this._film.index}">
     <h3 class="film-card__title">${filmName}</h3>
@@ -33,8 +33,8 @@ export default class FilmCardItem extends AbstractView {
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${comments.length}</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWishListClassName}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatchedListClassName}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWatchedListClassName}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWishListClassName}" type="button">Mark as watched</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite" type="button ${isFavoriteListClassName}">Mark as favorite</button>
     </div>
   </article>`;
