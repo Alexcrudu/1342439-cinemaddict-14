@@ -60,14 +60,15 @@ export default class Board {
 
   _renderFilm(film) {
     this._film = film;
+
     const filmCardContainer = document.querySelector('.films-list__container');
     this._newFilmItem = new FilmCardItemView(this._film);
     const template = this._newFilmItem.getElement();
     renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
     this._renderedFilmList[this._film.id] = this._newFilmItem;
 
+
     this._setEventListeners(this._newFilmItem);
-    return this._newFilmItem;
 
   }
 
@@ -85,7 +86,6 @@ export default class Board {
     });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
-      debugger
       this._handleFilmChange(
         Object.assign(
           {},
