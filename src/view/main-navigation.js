@@ -7,10 +7,7 @@ export default class SiteMenu extends AbstractView {
   }
 
   getTemplate() {
-    const favoriteFilms = () => {
-      const filtredFilms = Array.from(this._films.filter((film) => film.isFavorite));
-      return filtredFilms;
-    };
+    const filtredFilmsCount = this._films.filter((film) => film.isFavorite).length;
 
     const watchedFilmsCount = this._films.filter((film) => film.isWatched).length;
 
@@ -21,7 +18,7 @@ export default class SiteMenu extends AbstractView {
       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
       <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${wishedFilmsCount}</span></a>
       <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${watchedFilmsCount}</span></a>
-      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${favoriteFilms().length}</span></a>
+      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${filtredFilmsCount}</span></a>
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;

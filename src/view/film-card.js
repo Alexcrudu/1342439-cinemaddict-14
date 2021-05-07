@@ -33,9 +33,9 @@ export default class FilmCardItem extends AbstractView {
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${comments.length}</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWatchedListClassName}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWishListClassName}" type="button">Mark as watched</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite" type="button ${isFavoriteListClassName}">Mark as favorite</button>
+      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWishListClassName}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatchedListClassName}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavoriteListClassName}" type="button ">Mark as favorite</button>
     </div>
   </article>`;
   }
@@ -50,14 +50,14 @@ export default class FilmCardItem extends AbstractView {
     this._callback(film);
   }
 
-  _watchedClickHandler(evt) {
+  _watchedClickHandler(evt, film) {
     evt.preventDefault();
-    this._callback();
+    this._callback(film);
   }
 
-  _favoriteClickHandler(evt) {
+  _favoriteClickHandler(evt, film) {
     evt.preventDefault();
-    this._callback();
+    this._callback(film);
   }
 
   setClickHandlerPoster(callback) {
@@ -75,13 +75,13 @@ export default class FilmCardItem extends AbstractView {
   setWatchedClickHandler(callback) {
     this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-card__controls-item--mark-as-watched');
-    watchedFilm.addEventListener('click', this._watchedClickHandler);
+    watchedFilm.addEventListener('click', (e) => this._watchedClickHandler(e, this._film));
   }
 
   setFavoriteClickHandler(callback) {
     this._callback = callback;
     const favorite = this.getElement().querySelector('.film-card__controls-item--favorite');
-    favorite.addEventListener('click', this._favoriteClickHandler);
+    favorite.addEventListener('click', (e) => this._favoriteClickHandler(e, this._film));
   }
 }
 

@@ -17,8 +17,15 @@ export const renderTemplate = (container, template) => {
   container.insertAdjacentHTML('beforeend', template);
 };
 
-export const renderElement = (container, element) => {
-  container.append(element);
+export const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
 };
 
 export const createElement = (template) => {
@@ -49,5 +56,10 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
+};
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
 };
 

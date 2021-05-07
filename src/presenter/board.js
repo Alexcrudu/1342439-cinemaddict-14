@@ -5,7 +5,7 @@ import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
 import FilmCardItemView from '../view/film-card';
-import { renderElement, remove, updateItem } from '../utils.js';
+import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
 import FilmPopupView from '../view/film-popup.js';
 import NoFilmsView from '../view/no-films.js';
 
@@ -29,6 +29,7 @@ export default class Board {
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._setEventListeners = this._setEventListeners.bind(this);
   }
 
   init(films) {
@@ -41,17 +42,19 @@ export default class Board {
 
 
   _renderSiteList () {
-    renderElement(this._boardContainer, this._siteListComponent.getElement());
+    const template = this._siteListComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
   _renderSiteMenu(){
     const template = this._siteMenuComponent.getElement();
-    renderElement(this._boardContainer, template);
+    renderElement(this._boardContainer, template, RenderPosition.AFTERBEGIN);
   }
 
 
   _renderNoFilms(){
-    renderElement(this._boardContainer, this._noComponent.getElement());
+    const template = this._noComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
 
@@ -59,7 +62,8 @@ export default class Board {
     this._film = film;
     const filmCardContainer = document.querySelector('.films-list__container');
     this._newFilmItem = new FilmCardItemView(this._film);
-    renderElement(filmCardContainer, this._newFilmItem.getElement());
+    const template = this._newFilmItem.getElement();
+    renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
     this._renderedFilmList[this._film.id] = this._newFilmItem;
 
     this._setEventListeners(this._newFilmItem);
@@ -69,7 +73,8 @@ export default class Board {
 
 
   _setEventListeners (renderedFilm){
-    renderedFilm.setClickHandlerPoster((callbackFilm) => {
+    this._renderedFilm = renderedFilm;
+    this._renderedFilm.setClickHandlerPoster((callbackFilm) => {
 
       this._filmPopupComponent = new FilmPopupView(callbackFilm);
       this._filmPopupComponent.openElement();
@@ -80,10 +85,31 @@ export default class Board {
     });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
+      debugger
+      this._handleFilmChange(
+        Object.assign(
+          {},
+          renderedFilm, { isWishList: !renderedFilm.isWishList},
+        ),
+      );
+    },
+    );
+
+    renderedFilm.setWatchedClickHandler((renderedFilm) => {
       this._handleFilmChange(
         Object.assign(
           {},
           renderedFilm, { isWatched: !renderedFilm.isWatched},
+        ),
+      );
+    },
+    );
+
+    renderedFilm.setFavoriteClickHandler((renderedFilm) => {
+      this._handleFilmChange(
+        Object.assign(
+          {},
+          renderedFilm, { isFavorite: !renderedFilm.isFavorite},
         ),
       );
     },
@@ -95,7 +121,7 @@ export default class Board {
     this._clearFilmList();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderFilms(0, this._renderedFilmCount);
-    debugger
+    remove(this._siteMenuComponent);
     this._siteMenuComponent = new SiteMenuView(this._films);
     this._renderSiteMenu();
   }
@@ -111,22 +137,26 @@ export default class Board {
 
 
   _renderShowMoreButton () {
-    renderElement(this._boardContainer, this._showMoreButtonComponent.getElement());
+    const template = this._showMoreButtonComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
 
   _renderSort(){
-    renderElement(this._boardContainer, this._sortComponent.getElement());
+    const template = this._sortComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
   _renderTopRated() {
-    renderElement(this._boardContainer, this._topRatedComponent.getElement());
+    const template = this._topRatedComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
   _renderMostCommented() {
-    renderElement(this._boardContainer, this._mostCommentedComponent.getElement());
+    const template = this._mostCommentedComponent.getElement();
+    renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
   _clearFilmList() {
@@ -167,6 +197,10 @@ export default class Board {
     if(this._films.length > FILMS_COUNT_PER_STEP){
       this._renderShowMoreButton();
     }
+
+    this._renderTopRated();
+
+    this._renderMostCommented();
 
   }
 }
