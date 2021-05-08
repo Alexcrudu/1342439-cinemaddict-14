@@ -8,6 +8,8 @@ import FilmCardItemView from '../view/film-card';
 import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
 import FilmPopupView from '../view/film-popup.js';
 import NoFilmsView from '../view/no-films.js';
+import FilmCardPresenter from './board1.js';
+
 
 const FILMS_COUNT_PER_STEP = 5;
 // const siteBody = document.querySelector('body');
@@ -26,15 +28,17 @@ export default class Board {
     this._showMoreButtonComponent = new ShowMoreFilmsButtonView();
     this._topRatedComponent = new TopRatedView();
     this._mostCommentedComponent = new MostCommentedView();
+    this._filmComponent = new FilmCardPresenter();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._setEventListeners = this._setEventListeners.bind(this);
+    // this._setEventListeners = this._setEventListeners.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
     this._siteMenuComponent = new SiteMenuView(this._films);
+    this._filmComponent = new FilmCardPresenter();
     this._renderBoard();
 
 
@@ -59,62 +63,68 @@ export default class Board {
 
 
   _renderFilm(film) {
-    this._film = film;
+    // this._film = film;
+    debugger
+    this._filmConteiner = this._siteListComponent.getElement().querySelector('.films-list__container');
+    const filmPresenter = new FilmCardPresenter(this._filmConteiner, this._handleFilmChange);
+    this._newFilmItem = filmPresenter.init(film);
+    this._renderedFilmList[film.id] = this._newFilmItem;
 
-    const filmCardContainer = document.querySelector('.films-list__container');
-    this._newFilmItem = new FilmCardItemView(this._film);
-    const template = this._newFilmItem.getElement();
-    renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
-    this._renderedFilmList[this._film.id] = this._newFilmItem;
+
+    // const filmCardContainer = document.querySelector('.films-list__container');
+    // this._newFilmItem = new FilmCardItemView(this._film);
+    // const template = this._newFilmItem.getElement();
+    // renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
+    // this._renderedFilmList[this._film.id] = this._newFilmItem;
 
 
-    this._setEventListeners(this._newFilmItem);
+    // this._setEventListeners(this._newFilmItem);
 
   }
 
 
-  _setEventListeners (renderedFilm){
-    this._renderedFilm = renderedFilm;
-    this._renderedFilm.setClickHandlerPoster((callbackFilm) => {
+  // _setEventListeners (renderedFilm){
+  //   this._renderedFilm = renderedFilm;
+  //   this._renderedFilm.setClickHandlerPoster((callbackFilm) => {
 
-      this._filmPopupComponent = new FilmPopupView(callbackFilm);
-      this._filmPopupComponent.openElement();
+  //     this._filmPopupComponent = new FilmPopupView(callbackFilm);
+  //     this._filmPopupComponent.openElement();
 
-      this._filmPopupComponent.setClickHandler(() => {
-        this._filmPopupComponent.closeElement();
-      });
-    });
+  //     this._filmPopupComponent.setClickHandler(() => {
+  //       this._filmPopupComponent.closeElement();
+  //     });
+  //   });
 
-    renderedFilm.setWatchListClickHandler((renderedFilm) => {
-      this._handleFilmChange(
-        Object.assign(
-          {},
-          renderedFilm, { isWishList: !renderedFilm.isWishList},
-        ),
-      );
-    },
-    );
+  //   renderedFilm.setWatchListClickHandler((renderedFilm) => {
+  //     this._handleFilmChange(
+  //       Object.assign(
+  //         {},
+  //         renderedFilm, { isWishList: !renderedFilm.isWishList},
+  //       ),
+  //     );
+  //   },
+  //   );
 
-    renderedFilm.setWatchedClickHandler((renderedFilm) => {
-      this._handleFilmChange(
-        Object.assign(
-          {},
-          renderedFilm, { isWatched: !renderedFilm.isWatched},
-        ),
-      );
-    },
-    );
+  //   renderedFilm.setWatchedClickHandler((renderedFilm) => {
+  //     this._handleFilmChange(
+  //       Object.assign(
+  //         {},
+  //         renderedFilm, { isWatched: !renderedFilm.isWatched},
+  //       ),
+  //     );
+  //   },
+  //   );
 
-    renderedFilm.setFavoriteClickHandler((renderedFilm) => {
-      this._handleFilmChange(
-        Object.assign(
-          {},
-          renderedFilm, { isFavorite: !renderedFilm.isFavorite},
-        ),
-      );
-    },
-    );
-  }
+  //   renderedFilm.setFavoriteClickHandler((renderedFilm) => {
+  //     this._handleFilmChange(
+  //       Object.assign(
+  //         {},
+  //         renderedFilm, { isFavorite: !renderedFilm.isFavorite},
+  //       ),
+  //     );
+  //   },
+  //   );
+  // }
 
   _handleFilmChange(renderedFilm) {
     this._films = updateItem(this._films, renderedFilm);
