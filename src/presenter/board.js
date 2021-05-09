@@ -4,16 +4,12 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-// import FilmCardItemView from '../view/film-card';
 import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
-// import FilmPopupView from '../view/film-popup.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './board1.js';
 
 
 const FILMS_COUNT_PER_STEP = 5;
-// const siteBody = document.querySelector('body');
-// const ESC = 'Escape';
 
 export default class Board {
   constructor(boardContainer) {
@@ -32,7 +28,6 @@ export default class Board {
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    // this._setEventListeners = this._setEventListeners.bind(this);
   }
 
   init(films) {
@@ -69,61 +64,8 @@ export default class Board {
     filmPresenter.init(this._film);
     this._renderedFilmList[film.id] = filmPresenter;
 
-
-    // const filmCardContainer = document.querySelector('.films-list__container');
-    // this._newFilmItem = new FilmCardItemView(this._film);
-    // const template = this._newFilmItem.getElement();
-    // renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
-    // this._renderedFilmList[this._film.id] = this._newFilmItem;
-
-
-    // this._setEventListeners(this._newFilmItem);
-
   }
 
-
-  // _setEventListeners (renderedFilm){
-  //   this._renderedFilm = renderedFilm;
-  //   this._renderedFilm.setClickHandlerPoster((callbackFilm) => {
-
-  //     this._filmPopupComponent = new FilmPopupView(callbackFilm);
-  //     this._filmPopupComponent.openElement();
-
-  //     this._filmPopupComponent.setClickHandler(() => {
-  //       this._filmPopupComponent.closeElement();
-  //     });
-  //   });
-
-  //   renderedFilm.setWatchListClickHandler((renderedFilm) => {
-  //     this._handleFilmChange(
-  //       Object.assign(
-  //         {},
-  //         renderedFilm, { isWishList: !renderedFilm.isWishList},
-  //       ),
-  //     );
-  //   },
-  //   );
-
-  //   renderedFilm.setWatchedClickHandler((renderedFilm) => {
-  //     this._handleFilmChange(
-  //       Object.assign(
-  //         {},
-  //         renderedFilm, { isWatched: !renderedFilm.isWatched},
-  //       ),
-  //     );
-  //   },
-  //   );
-
-  //   renderedFilm.setFavoriteClickHandler((renderedFilm) => {
-  //     this._handleFilmChange(
-  //       Object.assign(
-  //         {},
-  //         renderedFilm, { isFavorite: !renderedFilm.isFavorite},
-  //       ),
-  //     );
-  //   },
-  //   );
-  // }
 
   _handleFilmChange(renderedFilm) {
     this._films = updateItem(this._films, renderedFilm);

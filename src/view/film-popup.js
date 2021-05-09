@@ -198,20 +198,11 @@ export default class FilmPopup extends AbstractView {
     this._container.addEventListener('keydown', this._eventHandler);
   }
 
-  _watchListClickHandler(evt, film) {
+  _clickHandler(evt, callback) {
     evt.preventDefault();
-    this._callback(film);
+    callback(this._film);
   }
 
-  _watchedClickHandler(evt, film) {
-    evt.preventDefault();
-    this._callback(film);
-  }
-
-  _favoriteClickHandler(evt, film) {
-    evt.preventDefault();
-    this._callback(film);
-  }
 
   openElement() {
     this._container.appendChild(this.getElement());
@@ -227,19 +218,19 @@ export default class FilmPopup extends AbstractView {
   setWatchListClickHandler(callback) {
     this._callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-label--watchlist');
-    watchList.addEventListener('click', (e) => this._watchListClickHandler(e, this._film));
+    watchList.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
     this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-details__control-label--watched');
-    watchedFilm.addEventListener('click', (e) => this._watchedClickHandler(e, this._film));
+    watchedFilm.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
     this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-label--favorite');
-    favorite.addEventListener('click', (e) => this._favoriteClickHandler(e, this._film));
+    favorite.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
 }

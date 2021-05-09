@@ -1,4 +1,3 @@
-// import FilmsListView from '../view/films';
 import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
 import { renderElement, remove, RenderPosition} from '../utils.js';
@@ -22,14 +21,9 @@ export default class FilmCard {
   }
 
   _renderFilm() {
-    // this._film = film;
-    // debugger
-
     const filmCardContainer = document.querySelector('.films-list__container');
-    // this._newFilmItem = new FilmCardItemView(this._film);
     const template = this._newFilmItem.getElement();
     renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
-    // this._renderedFilmList[this._film.id] = this._newFilmItem;
 
 
     this._setEventListeners(this._newFilmItem);
@@ -52,50 +46,63 @@ export default class FilmCard {
       this._filmPopupComponent.setClickHandler(() => {
         this._filmPopupComponent.closeElement();
       });
+
+      this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
+        this._handlerWishList(renderedFilm);
+      },
+      );
+
+
+      this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
+        this._handlerWatched(renderedFilm);
+      });
+
+      this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
+        this._handlerFavorite(renderedFilm);
+      });
+
     });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
-      this._changeData(
-        Object.assign(
-          {},
-          renderedFilm, { isWishList: !renderedFilm.isWishList},
-        ),
-      );
+      this._handlerWishList(renderedFilm);
     },
     );
 
     renderedFilm.setWatchedClickHandler((renderedFilm) => {
-      this._changeData(
-        Object.assign(
-          {},
-          renderedFilm, { isWatched: !renderedFilm.isWatched},
-        ),
-      );
+      this._handlerWatched(renderedFilm);
     },
     );
 
     renderedFilm.setFavoriteClickHandler((renderedFilm) => {
-      this._changeData(
-        Object.assign(
-          {},
-          renderedFilm, { isFavorite: !renderedFilm.isFavorite},
-        ),
-      );
+      this._handlerFavorite(renderedFilm);
     },
     );
   }
 
-  _handlerWatchList() {
-    this._film.setWatchListClickHandler(() => {
-      this._changeData(
-        Object.assign(
-          {},
-          this._film, { isWishList: !this._film.isWishList},
-        ),
-      );
-    },
+  _handlerWishList(film) {
+    this._changeData(
+      Object.assign(
+        {},
+        film, { isWishList: !film.isWishList},
+      ),
     );
   }
 
+  _handlerWatched(film) {
+    this._changeData(
+      Object.assign(
+        {},
+        film, { isWatched: !film.isWatched},
+      ),
+    );
+  }
 
+  _handlerFavorite(film) {
+    this._changeData(
+      Object.assign(
+        {},
+        film, { isFavorite: !film.isFavorite},
+      ),
+    );
+  }
 }
