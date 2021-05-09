@@ -4,9 +4,9 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-import FilmCardItemView from '../view/film-card';
+// import FilmCardItemView from '../view/film-card';
 import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
-import FilmPopupView from '../view/film-popup.js';
+// import FilmPopupView from '../view/film-popup.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './board1.js';
 
@@ -63,12 +63,11 @@ export default class Board {
 
 
   _renderFilm(film) {
-    // this._film = film;
-    debugger
+    this._film = film;
     this._filmConteiner = this._siteListComponent.getElement().querySelector('.films-list__container');
     const filmPresenter = new FilmCardPresenter(this._filmConteiner, this._handleFilmChange);
-    this._newFilmItem = filmPresenter.init(film);
-    this._renderedFilmList[film.id] = this._newFilmItem;
+    filmPresenter.init(this._film);
+    this._renderedFilmList[film.id] = filmPresenter;
 
 
     // const filmCardContainer = document.querySelector('.films-list__container');
@@ -172,7 +171,7 @@ export default class Board {
   _clearFilmList() {
     const test = Object.values(this._renderedFilmList);
 
-    test.forEach((film) => remove(film));
+    test.forEach((film) => film.destroy());
     this._renderedFilmList = {};
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
   }

@@ -241,4 +241,5 @@ export default class FilmPopup extends AbstractView {
     const favorite = this.getElement().querySelector('.film-details__control-label--favorite');
     favorite.addEventListener('click', (e) => this._favoriteClickHandler(e, this._film));
   }
+
 }
