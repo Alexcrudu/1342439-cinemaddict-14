@@ -6,7 +6,7 @@ import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
 import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
 import NoFilmsView from '../view/no-films.js';
-import FilmCardPresenter from './board1.js';
+import FilmCardPresenter from './film.js';
 
 
 const FILMS_COUNT_PER_STEP = 5;
