@@ -22,6 +22,10 @@ export const sortByDate = (filmA, filmB) => {
   return dayjs(filmA.date).diff(dayjs(filmB.date));
 };
 
+export const sortByRating = (filmA, filmB) => {
+  return filmA.rating - filmB.rating;
+};
+
 export const renderElement = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:

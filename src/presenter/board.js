@@ -4,7 +4,7 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-import { renderElement, remove, updateItem, RenderPosition, sortByDate} from '../utils.js';
+import { renderElement, remove, updateItem, RenderPosition, sortByDate, sortByRating} from '../utils.js';
 import { SortType} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './film.js';
@@ -109,6 +109,9 @@ export default class Board {
       case SortType.DATE:
 
         this._films.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this._films.sort(sortByRating);
         break;
       default: this._films = this._sourcedBoardFilms.slice();
     }
