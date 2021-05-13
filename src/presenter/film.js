@@ -38,7 +38,7 @@ export default class FilmCard {
       this._filmPopupComponent.openElement();
 
       this._filmPopupComponent.setClickHandler(() => {
-        this._filmPopupComponent.closeElement();
+        remove(this._filmPopupComponent);
       });
 
       this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
