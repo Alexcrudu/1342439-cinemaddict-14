@@ -22,11 +22,11 @@ export default class MainSort extends AbstractView {
     }
 
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.dataset.sortType);
+    this._callback(evt.target.dataset.sortType);
   }
 
   setSortTypeChangeHandler(callback) {
-    this._callback.sortTypeChange = callback;
+    this._callback = callback;
     this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }

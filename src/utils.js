@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import AbstractView from './view/abstract.js';
 
 export const getRandomInteger = (a = 0, b = 1) => {
@@ -15,6 +16,10 @@ export const getRandomIndex = function (list) {
 
 export const renderTemplate = (container, template) => {
   container.insertAdjacentHTML('beforeend', template);
+};
+
+export const sortByDate = (filmA, filmB) => {
+  return dayjs(filmA.date).diff(dayjs(filmB.date));
 };
 
 export const renderElement = (container, element, place) => {

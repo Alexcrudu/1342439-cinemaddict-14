@@ -4,7 +4,8 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-import { renderElement, remove, updateItem, RenderPosition} from '../utils.js';
+import { renderElement, remove, updateItem, RenderPosition, sortByDate} from '../utils.js';
+import { SortType} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './film.js';
 
@@ -16,6 +17,7 @@ export default class Board {
     this._boardContainer = boardContainer;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
+    this._currentSort = SortType.DEFAULT;
 
 
     this._noComponent = new NoFilmsView();
@@ -28,10 +30,12 @@ export default class Board {
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
+    this._sourcedBoardFilms = films.slice();
     this._siteMenuComponent = new SiteMenuView(this._films);
     this._filmComponent = new FilmCardPresenter();
     this._renderBoard();
@@ -67,6 +71,7 @@ export default class Board {
 
   _handleFilmChange(renderedFilm) {
     this._films = updateItem(this._films, renderedFilm);
+    this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms. renderedFilm);
     this._clearFilmList();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderFilms(0, this._renderedFilmCount);
@@ -96,6 +101,26 @@ export default class Board {
   _renderSort(){
     const template = this._sortComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+  }
+
+  _sortFilms(sortType)  {
+    switch (sortType) {
+      case SortType.DATE:
+
+        this._films.sort(sortByDate);
+        break;
+      default: this._films = this._sourcedBoardFilms.slice();
+    }
+
+    this._currentSort = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if(this._currentSort === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
   }
 
 
