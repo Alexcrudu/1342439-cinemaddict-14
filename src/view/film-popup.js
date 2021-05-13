@@ -83,13 +83,13 @@ export default class FilmPopup extends AbstractView {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input film-details__control-input--watch-list visually-hidden" id="watchlist" name="watchlist" ${isWishListChecked}>
+        <input type="checkbox" class="film-details__control-input film-details__control-input--watchlist visually-hidden" id="watchlist" name="watchlist" ${isWishListChecked}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatchedListChecked}>
+        <input type="checkbox" class="film-details__control-input film-details__control-input--watched visually-hidden" id="watched" name="watched" ${isWatchedListChecked}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavoriteListChecked}>
+        <input type="checkbox" class="film-details__control-input film-details__control-input--favorite visually-hidden" id="favorite" name="favorite" ${isFavoriteListChecked}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -223,20 +223,20 @@ export default class FilmPopup extends AbstractView {
 
   setWatchListClickHandler(callback) {
     this._callback = callback;
-    const watchList = this.getElement().querySelector('.film-details__control-label--watchlist');
-    watchList.addEventListener('click', (e) => this._clickHandler(e, callback));
+    const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
+    watchList.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
     this._callback = callback;
-    const watchedFilm = this.getElement().querySelector('.film-details__control-label--watched');
-    watchedFilm.addEventListener('click', (e) => this._clickHandler(e, callback));
+    const watchedFilm = this.getElement().querySelector('.film-details__control-input--watched');
+    watchedFilm.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
     this._callback = callback;
-    const favorite = this.getElement().querySelector('.film-details__control-label--favorite');
-    favorite.addEventListener('click', (e) => this._clickHandler(e, callback));
+    const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
+    favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
 }

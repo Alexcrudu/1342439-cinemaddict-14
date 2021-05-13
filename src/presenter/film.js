@@ -34,7 +34,6 @@ export default class FilmCard {
   _setEventListeners (renderedFilm){
     this._renderedFilm = renderedFilm;
     this._renderedFilm.setClickHandlerPoster(() => {
-
       this._filmPopupComponent.openElement();
 
       this._filmPopupComponent.setClickHandler(() => {
