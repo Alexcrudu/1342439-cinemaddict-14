@@ -71,7 +71,7 @@ export default class Board {
 
   _handleFilmChange(renderedFilm) {
     this._films = updateItem(this._films, renderedFilm);
-    this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms. renderedFilm);
+    this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, renderedFilm);
     this._clearFilmList();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderFilms(0, this._renderedFilmCount);
@@ -121,6 +121,9 @@ export default class Board {
       return;
     }
     this._sortFilms(sortType);
+
+    this._clearFilmList();
+    this._renderFilms();
   }
 
 

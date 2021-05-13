@@ -83,7 +83,7 @@ export default class FilmPopup extends AbstractView {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWishListChecked}>
+        <input type="checkbox" class="film-details__control-input film-details__control-input--watch-list visually-hidden" id="watchlist" name="watchlist" ${isWishListChecked}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatchedListChecked}>
@@ -187,6 +187,7 @@ export default class FilmPopup extends AbstractView {
   </form>
 </section>`;
   }
+
 
   _eventHandler(evt, callback) {
     evt.preventDefault();
