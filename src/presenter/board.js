@@ -35,8 +35,6 @@ export default class Board {
     this._siteMenuComponent = new SiteMenuView(this._films);
     this._filmComponent = new FilmCardPresenter();
     this._renderBoard();
-
-
   }
 
 
@@ -44,6 +42,7 @@ export default class Board {
     const template = this._siteListComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
+
 
   _renderSiteMenu(){
     const template = this._siteMenuComponent.getElement();
@@ -61,9 +60,8 @@ export default class Board {
     this._film = film;
     this._filmConteiner = this._siteListComponent.getElement().querySelector('.films-list__container');
     const filmPresenter = new FilmCardPresenter(this._filmConteiner, this._handleFilmChange);
-    filmPresenter.init(this._film);
+    filmPresenter.init(this._filmConteiner, this._film);
     this._renderedFilmList[film.id] = filmPresenter;
-
   }
 
 
@@ -100,15 +98,18 @@ export default class Board {
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
+
   _renderTopRated() {
     const template = this._topRatedComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
 
+
   _renderMostCommented() {
     const template = this._mostCommentedComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
   }
+
 
   _clearFilmList() {
     const test = Object.values(this._renderedFilmList);
@@ -117,6 +118,7 @@ export default class Board {
     this._renderedFilmList = {};
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
   }
+
 
   _handleShowMoreButtonClick() {
 
@@ -127,6 +129,7 @@ export default class Board {
       remove(this._showMoreButtonComponent);
     }
   }
+
 
   _renderBoard(){
 
@@ -152,6 +155,5 @@ export default class Board {
     this._renderTopRated();
 
     this._renderMostCommented();
-
   }
 }

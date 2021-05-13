@@ -5,42 +5,36 @@ import { renderElement, remove, RenderPosition} from '../utils.js';
 
 export default class FilmCard {
   constructor(filmListContainer, changeData) {
-
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
 
     this._setEventListeners = this._setEventListeners.bind(this);
   }
 
-  init(film) {
+  init(container, film) {
     this._film = film;
     this._newFilmItem = new FilmCardItemView(this._film);
     this._filmPopupComponent = new FilmPopupView(this._film);
 
-    this._renderFilm(film);
+    this._renderFilm(container);
   }
 
-  _renderFilm() {
-    const filmCardContainer = document.querySelector('.films-list__container');
+  _renderFilm(container) {
     const template = this._newFilmItem.getElement();
-    renderElement(filmCardContainer, template, RenderPosition.BEFOREEND);
-
+    renderElement(container, template, RenderPosition.BEFOREEND);
 
     this._setEventListeners(this._newFilmItem);
-
   }
 
   destroy() {
     remove(this._newFilmItem);
-    remove(this._filmPopupComponent);
   }
 
 
   _setEventListeners (renderedFilm){
     this._renderedFilm = renderedFilm;
-    this._renderedFilm.setClickHandlerPoster((callbackFilm) => {
+    this._renderedFilm.setClickHandlerPoster(() => {
 
-      this._filmPopupComponent = new FilmPopupView(callbackFilm);
       this._filmPopupComponent.openElement();
 
       this._filmPopupComponent.setClickHandler(() => {
@@ -105,4 +99,5 @@ export default class FilmCard {
       ),
     );
   }
+
 }

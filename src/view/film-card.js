@@ -5,8 +5,6 @@ export default class FilmCardItem extends AbstractView {
     super();
 
     this._film = film;
-
-
   }
 
   getTemplate() {

@@ -45,5 +45,34 @@ export default class MostCommented extends AbstractView {
     </div>
   </section>`;
   }
+
+  _clickHandler(evt, callback) {
+    evt.preventDefault();
+    callback(this._film);
+  }
+
+  setClickHandlerPoster(callback) {
+    this._callback = callback;
+    const poster = this.getElement().querySelector('.film-card__poster');
+    poster.addEventListener('click', (e) => this._clickHandler(e, callback));
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback = callback;
+    const watchList = this.getElement().querySelector('.film-card__controls-item--add-to-watchlist');
+    watchList.addEventListener('click', (e) => this._clickHandler(e, callback));
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback = callback;
+    const watchedFilm = this.getElement().querySelector('.film-card__controls-item--mark-as-watched');
+    watchedFilm.addEventListener('click', (e) => this._clickHandler(e, callback));
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback = callback;
+    const favorite = this.getElement().querySelector('.film-card__controls-item--favorite');
+    favorite.addEventListener('click', (e) => this._clickHandler(e, callback));
+  }
 }
 

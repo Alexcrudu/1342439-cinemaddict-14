@@ -9,7 +9,13 @@ export default class FilmPopup extends AbstractView {
   }
 
   getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments} = this._film;
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments, isWishList, isWatched, isFavorite} = this._film;
+
+    const isWishListChecked = isWishList ? 'checked' : '';
+
+    const isWatchedListChecked = isWatched ? 'checked' : '';
+
+    const isFavoriteListChecked = isFavorite ? 'checked' : '';
 
     return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -77,13 +83,13 @@ export default class FilmPopup extends AbstractView {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWishListChecked}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatchedListChecked}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavoriteListChecked}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -182,20 +188,20 @@ export default class FilmPopup extends AbstractView {
 </section>`;
   }
 
-  _eventHandler(evt) {
+  _eventHandler(evt, callback) {
     evt.preventDefault();
-    if (evt.key && evt.key === 'Escape') {
-      this._callback();
+    if (evt.key === 'Escape') {
+      callback(this._film);
     } else {
-      this._callback();
+      callback(this._film);
     }
   }
 
   setClickHandler(callback) {
     this._callback = callback;
     const closeButton = this.getElement().querySelector('.film-details__close-btn');
-    closeButton.addEventListener('click', this._eventHandler);
-    this._container.addEventListener('keydown', this._eventHandler);
+    closeButton.addEventListener('click', (e) => this._eventHandler(e, callback));
+    this._container.addEventListener('keydown', (e) => this._eventHandler(e, callback));
   }
 
   _clickHandler(evt, callback) {
@@ -213,7 +219,6 @@ export default class FilmPopup extends AbstractView {
     this._container.removeChild(element);
     this._container.removeEventListener('keydown', this._eventHandler);
   }
-
 
   setWatchListClickHandler(callback) {
     this._callback = callback;
