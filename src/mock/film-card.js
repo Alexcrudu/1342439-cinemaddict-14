@@ -2,6 +2,7 @@ import {getRandomInteger} from '../utils.js';
 import {getRandomIndex} from '../utils.js';
 import {generateFilmComments} from './comments.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 const MIN_YEAR = 1980;
 const MAX_YEAR = 2020;
@@ -13,6 +14,7 @@ const MIN_AGE = 0;
 const MAX_AGE = 18;
 const MAX_ACTORS = 5;
 const MAX_RUNTIME= 100;
+
 
 const posters = [
   './images/posters/made-for-each-other.png',
@@ -68,6 +70,14 @@ const generateGenre = () => {
 
   return newGenres;
 };
+
+const generateDate = () => {
+  const maxYearsGap = -9;
+  const yearGap = getRandomInteger(0, maxYearsGap);
+  const date = dayjs().add(yearGap, 'y').toDate();
+  return dayjs(date).format('DD/MMMM/YYYY');
+};
+
 
 const generateDescription = ()=> {
   const descriptionText = [
@@ -162,7 +172,7 @@ export const generateFilmCard = () => {
     description: generateDescription(),
     comments: generateFilmComments(),
     actors: generateActors(),
-    date: 'date',
+    date: generateDate(),
     coutry: getRandomIndex(country),
     runtime: getRandomInteger(0, MAX_RUNTIME),
     isWishList: Boolean(getRandomInteger(0, 1)),
