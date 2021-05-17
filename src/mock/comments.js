@@ -1,9 +1,9 @@
-import {getRandomIndex} from '../utils.js';
-import {getRandomInteger} from '../utils.js';
+import {getRandomIndex, getRandomInteger} from '../utils.js';
+import { nanoid } from 'nanoid';
 
 
 const emojies = ['smile', 'sleeping', 'puke', 'angry'];
-const MAX_COMMENTS = 20;
+const MAX_COMMENTS = 7;
 
 const commentText = [
   'The words on screen often pass by too quickly to read or comprehend in full',
@@ -21,6 +21,7 @@ const commentText = [
 
 const generateCommentMock = () => {
   return {
+    id: nanoid(),
     text: getRandomIndex(commentText),
     emoji: getRandomIndex(emojies),
     author: 'author',
@@ -29,12 +30,13 @@ const generateCommentMock = () => {
 };
 
 export const generateFilmComments = () => {
-  const filmComments = new Set ();
+  // const filmComments = new Set ();
 
-  for (let i=0; i < getRandomInteger(1, MAX_COMMENTS); i++) {
-    filmComments.add(generateCommentMock());
-  }
+  // for (let i=0; i < getRandomInteger(1, MAX_COMMENTS); i++) {
+  //   filmComments.add(generateCommentMock());
+  // }
+  const comments = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
 
-
-  return Array.from(filmComments);
+  // return Array.from(filmComments);
+  return comments;
 };

@@ -1,21 +1,31 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 
-export default class FilmPopup extends AbstractView {
+export default class FilmPopup extends SmartView {
   constructor(film) {
     super();
-    this._film = film;
+    this._data = film;
     this._eventHandler = this._eventHandler.bind(this);
     this._container = document.querySelector('body');
+    this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
+    this.setCommentEmojiClickHandler();
   }
 
-  getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments, isWishList, isWatched, isFavorite} = this._film;
 
+  getTemplate() {
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments, isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
     const isWishListChecked = isWishList ? 'checked' : '';
 
     const isWatchedListChecked = isWatched ? 'checked' : '';
 
     const isFavoriteListChecked = isFavorite ? 'checked' : '';
+
+    const getNewCommentEmoji = (newCommentEmoji) => {
+      if(newCommentEmoji!== '') {
+        return `<img src="${newCommentEmoji}" width="55" height="55" alt="emoji">`;
+      } else {
+        return '';
+      }
+    };
 
     return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -99,62 +109,12 @@ export default class FilmPopup extends AbstractView {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          <li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-            </span>
-            <div>
-              <p class="film-details__comment-text">Interesting setting and a good cast</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">Tim Macoveev</span>
-                <span class="film-details__comment-day">2019/12/31 23:59</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>
-          <li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji-sleeping">
-            </span>
-            <div>
-              <p class="film-details__comment-text">Booooooooooring</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">John Doe</span>
-                <span class="film-details__comment-day">2 days ago</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>
-          <li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji-puke">
-            </span>
-            <div>
-              <p class="film-details__comment-text">Very very old. Meh</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">John Doe</span>
-                <span class="film-details__comment-day">2 days ago</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>
-          <li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/angry.png" width="55" height="55" alt="emoji-angry">
-            </span>
-            <div>
-              <p class="film-details__comment-text">Almost two hours? Seriously?</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">John Doe</span>
-                <span class="film-details__comment-day">Today</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>
+
+          ${this._getCommentTemplate(comments)}
         </ul>
 
         <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
+          <div class="film-details__add-emoji-label">${getNewCommentEmoji(newCommentEmoji)}</div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -188,26 +148,43 @@ export default class FilmPopup extends AbstractView {
 </section>`;
   }
 
+  _getCommentTemplate (comments) {
+    return comments.map((comment) => {
+      return `<li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">Tim Macoveev</span>
+          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+    </li>`;
+    });
+
+  }
+
 
   _eventHandler(evt, callback) {
     evt.preventDefault();
     if (evt.key === 'Escape') {
-      callback(this._film);
-    } else {
-      callback(this._film);
+      callback(this._data);
     }
   }
 
   setClickHandler(callback) {
     this._callback = callback;
     const closeButton = this.getElement().querySelector('.film-details__close-btn');
-    closeButton.addEventListener('click', (e) => this._eventHandler(e, callback));
+    closeButton.addEventListener('click', (e) => this._clickHandler(e, callback));
     this._container.addEventListener('keydown', (e) => this._eventHandler(e, callback));
   }
 
   _clickHandler(evt, callback) {
     evt.preventDefault();
-    callback(this._film);
+    callback(this._data);
   }
 
 
@@ -237,6 +214,49 @@ export default class FilmPopup extends AbstractView {
     this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
     favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
+  }
+
+
+  _commentEmojiClickHandler(evt) {
+    evt.preventDefault();
+    if(evt.target.tagName === 'IMG') {
+      this.updateData(
+        Object.assign(
+          {},
+          this._data,
+          {
+            newCommentEmoji: evt.target.src,
+          },
+        ), false,
+      );
+
+      const inputHiddenId = evt.target.parentElement.attributes['for'];
+      const inputHidden = document.getElementById(inputHiddenId.value);
+      inputHidden.checked = true;
+    }
+
+    const newCommentEmoji = document.querySelector('.film-details__add-emoji-label');
+    if(newCommentEmoji !== null) {
+      newCommentEmoji.scrollIntoView();
+    }
+  }
+
+  setCommentEmojiClickHandler(callback) {
+    this._callback = callback;
+
+    const newCommentEmoji = this.getElement().querySelector('.film-details__emoji-list');
+
+    if(newCommentEmoji !==null) {
+      newCommentEmoji.addEventListener('click', this._commentEmojiClickHandler);
+    }
+  }
+
+  restoreHandlers() {
+    this.setClickHandler(this._callback);
+    this.setCommentEmojiClickHandler(this._callback);
+    this.setWatchedClickHandler(this._callback);
+    this.setWatchListClickHandler(this._callback);
+    this.setFavoriteClickHandler(this._callback);
   }
 
 }
