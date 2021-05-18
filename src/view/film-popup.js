@@ -158,7 +158,7 @@ export default class FilmPopup extends SmartView {
         <p class="film-details__comment-text">${comment.text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">Tim Macoveev</span>
-          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <span class="film-details__comment-day">${comment.date} </span>
           <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
         </p>
       </div>
