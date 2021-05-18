@@ -1,5 +1,6 @@
 import {getRandomIndex, getRandomInteger} from '../utils.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 
 const emojies = ['smile', 'sleeping', 'puke', 'angry'];
@@ -18,6 +19,21 @@ const commentText = [
   'That is as it should be.',
 ];
 
+const generateDate = () => {
+  const maxYearsGap = -2;
+  const maxMonthGap = -11;
+  const maxDayGap = -28;
+  const maxHourGap = -23;
+  const maxMinuteGap = -59;
+  const yearGap = getRandomInteger(0, maxYearsGap);
+  const monthGap = getRandomInteger(0, maxMonthGap);
+  const dayGap = getRandomInteger(0, maxDayGap);
+  const hourGap = getRandomInteger(0, maxHourGap);
+  const minuteGap = getRandomInteger(0, maxMinuteGap);
+  const date = dayjs().add(yearGap, 'y').add(monthGap, 'M').add(dayGap, 'd').add(hourGap, 'h').add(minuteGap, 'm').toDate();
+  return dayjs(date).format('YYYY/MM/DD HH:mm');
+};
+
 
 const generateCommentMock = () => {
   return {
@@ -25,7 +41,7 @@ const generateCommentMock = () => {
     text: getRandomIndex(commentText),
     emoji: getRandomIndex(emojies),
     author: 'author',
-    date: 'date',
+    date: generateDate(),
   };
 };
 
