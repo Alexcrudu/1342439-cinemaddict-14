@@ -4,7 +4,7 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-import { renderElement, remove, updateItem, RenderPosition, sortByDate, sortByRating} from '../utils.js';
+import { renderElement, remove, updateItem, RenderPosition, sortByDate, sortByRating} from '../utils/functions.js';
 import { SortType} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './film.js';
@@ -13,8 +13,9 @@ import FilmCardPresenter from './film.js';
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class Board {
-  constructor(boardContainer) {
+  constructor(boardContainer, filmsModel) {
     this._boardContainer = boardContainer;
+    this._filmsModel = filmsModel;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;
@@ -39,6 +40,10 @@ export default class Board {
     this._siteMenuComponent = new SiteMenuView(this._films);
     this._filmComponent = new FilmCardPresenter();
     this._renderBoard();
+  }
+
+  _getFilms() {
+    return this._filmsModel.getTasks();
   }
 
 

@@ -1,5 +1,5 @@
-import {getRandomInteger} from '../utils.js';
-import {getRandomIndex} from '../utils.js';
+import {getRandomInteger} from '../utils/functions.js';
+import {getRandomIndex} from '../utils/functions.js';
 import {generateFilmComments} from './comments.js';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';

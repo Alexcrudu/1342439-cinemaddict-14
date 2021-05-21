@@ -1,6 +1,6 @@
 import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
-import { renderElement, remove, RenderPosition} from '../utils.js';
+import { renderElement, remove, RenderPosition} from '../utils/functions.js';
 
 
 export default class FilmCard {
