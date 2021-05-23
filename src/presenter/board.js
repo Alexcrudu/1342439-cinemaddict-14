@@ -4,7 +4,7 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-import { renderElement, remove, updateItem, RenderPosition, sortByDate, sortByRating} from '../utils/functions.js';
+import { renderElement, remove, RenderPosition, sortByDate, sortByRating} from '../utils/functions.js';
 import { SortType, UpdateType, MenuItem} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
 import FilmCardPresenter from './film.js';
@@ -21,7 +21,6 @@ export default class Board {
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;
     this._currentMenuItem = MenuItem.ALL;
-    console.log(this._currentMenuItem)
 
 
     this._noComponent = new NoFilmsView();
@@ -42,8 +41,6 @@ export default class Board {
   }
 
   init() {
-    // this._films = films.slice();
-    // this._sourcedBoardFilms = films.slice();
     this._siteMenuComponent = new SiteMenuView(this._getFilms());
     this._filmComponent = new FilmCardPresenter();
     this._renderBoard();
@@ -60,20 +57,14 @@ export default class Board {
     return this._filmsModel.getFilms();
   }
 
-  // _getComments() {
-  //   return this._commentsModel._getComments().slice();
-  // }
+
   _getMenu(){
-    debugger
+    this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const wishListFilms = this._filmsModel.getFilms().filter((film) => film.isWishList);
     const watchedFilms = this._filmsModel.getFilms().filter((film) =>film.isWatched);
     const favoriteFilms = this._filmsModel.getFilms().filter((film) =>film.isFavorite);
     const allFilms = this._filmsModel.getFilms();
     switch (this._currentMenuItem) {
-      case MenuItem.ALL:
-        this._clearFilmList();
-        this._renderFilms(allFilms);
-        break;
       case MenuItem.WATCHLIST :
         this._clearFilmList();
         this._renderFilms(wishListFilms);
@@ -86,8 +77,10 @@ export default class Board {
         this._clearFilmList();
         this._renderFilms(favoriteFilms);
         break;
+      default:
+        this._clearFilmList();
+        this._renderFilms(allFilms);
     }
-    // return this._filmsModel.getFilms();
   }
 
 
@@ -167,7 +160,8 @@ export default class Board {
   }
 
 
-  // _renderFilms(from, to) {
+  // _renderFilms(films, from, to,) {
+  //   this._films = films;
   //   const filmsListSlice = this._films.slice(from, to);
   //   filmsListSlice.forEach((film, index) => {
   //     film.index = index;
@@ -193,21 +187,6 @@ export default class Board {
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
-
-  // _sortFilms(sortType)  {
-  //   switch (sortType) {
-  //     case SortType.DATE:
-
-  //       this._films.sort(sortByDate);
-  //       break;
-  //     case SortType.RATING:
-  //       this._films.sort(sortByRating);
-  //       break;
-  //     default: this._films = this._sourcedBoardFilms.slice();
-  //   }
-
-  //   this._currentSort = sortType;
-  // }
 
   _handleSortTypeChange(sortType) {
     if(this._currentSort === sortType) {
@@ -242,12 +221,6 @@ export default class Board {
 
   _handleShowMoreButtonClick() {
 
-    // this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP, this._films);
-    // this._renderedFilmCount += FILMS_COUNT_PER_STEP;
-
-    // if (this._renderedFilmCount >= this._films.length) {
-    //   remove(this._showMoreButtonComponent);
-    // }
     const filmCount = this._getFilms().length;
 
     const newRenderedFilmCount = Math.min(filmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP);
@@ -291,12 +264,6 @@ export default class Board {
 
     this._renderedFilmsOnBoard();
 
-    // this._renderFilms(0, Math.min(this._films.length, FILMS_COUNT_PER_STEP), this._films);
-
-
-    // if(this._films.length > FILMS_COUNT_PER_STEP){
-    //   this._renderShowMoreButton();
-    // }
 
     this._renderTopRated();
 

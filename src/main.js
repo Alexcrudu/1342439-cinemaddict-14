@@ -23,7 +23,6 @@ filmsModel.setFilms(films);
 
 const commentsModel = new CommentsModel();
 commentsModel.setComments(comments);
-console.log(commentsModel);
 
 const siteMain = document.querySelector('.main');
 
