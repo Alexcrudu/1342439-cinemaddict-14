@@ -20,6 +20,8 @@ export default class Board {
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;
+    this._currentMenuItem = MenuItem.ALL;
+    console.log(this._currentMenuItem)
 
 
     this._noComponent = new NoFilmsView();
@@ -34,6 +36,7 @@ export default class Board {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleMenuItemChange =  this._handleMenuItemChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
   }
@@ -60,6 +63,32 @@ export default class Board {
   // _getComments() {
   //   return this._commentsModel._getComments().slice();
   // }
+  _getMenu(){
+    debugger
+    const wishListFilms = this._filmsModel.getFilms().filter((film) => film.isWishList);
+    const watchedFilms = this._filmsModel.getFilms().filter((film) =>film.isWatched);
+    const favoriteFilms = this._filmsModel.getFilms().filter((film) =>film.isFavorite);
+    const allFilms = this._filmsModel.getFilms();
+    switch (this._currentMenuItem) {
+      case MenuItem.ALL:
+        this._clearFilmList();
+        this._renderFilms(allFilms);
+        break;
+      case MenuItem.WATCHLIST :
+        this._clearFilmList();
+        this._renderFilms(wishListFilms);
+        break;
+      case MenuItem.HISTORY :
+        this._clearFilmList();
+        this._renderFilms(watchedFilms);
+        break;
+      case MenuItem.FAVORITES:
+        this._clearFilmList();
+        this._renderFilms(favoriteFilms);
+        break;
+    }
+    // return this._filmsModel.getFilms();
+  }
 
 
   _renderSiteList () {
@@ -71,6 +100,16 @@ export default class Board {
   _renderSiteMenu(){
     const template = this._siteMenuComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.AFTERBEGIN);
+    this._siteMenuComponent.setMenuItemChangeHandler(this._handleMenuItemChange);
+  }
+
+  _handleMenuItemChange(menuItem) {
+    if(this._currentMenuItem === menuItem) {
+      return;
+    }
+    this._currentMenuItem = menuItem;
+
+    this._getMenu();
   }
 
 

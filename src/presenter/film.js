@@ -13,7 +13,6 @@ export default class FilmCard {
   }
 
   init(container, film, comments) {
-    console.log(comments)
     this._comments = comments;
     this._film = film;
     this._film.comments = this._getComments();
@@ -46,17 +45,31 @@ export default class FilmCard {
 
       this._filmPopupComponent.setClickHandler(() => {
         remove(this._filmPopupComponent);
+
+        this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
+          this._handlerWishList(renderedFilm);
+        },
+        );
+
+        this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
+          this._handlerWatched(renderedFilm);
+        },
+        );
+
+        this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
+          this._handlerFavorite(renderedFilm);
+        },
+        );
+
+        this._filmPopupComponent.setDeleteHandler((comment) => {
+          this._comments.deleteComment(comment);
+          remove(this._filmPopupComponent);
+          this._film.comments = this._getComments();
+          this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
+          this._filmPopupComponent.openElement();
+        });
       });
 
-      this._filmPopupComponent.setDeleteHandler((comment) => {
-        // debugger
-        this._comments.deleteComment(comment);
-        remove(this._filmPopupComponent);
-        this._film.comments = this._getComments();
-        this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
-        this._filmPopupComponent.openElement();
-
-      });
 
       renderedFilm.setWatchListClickHandler((renderedFilm) => {
         this._handlerWishList(renderedFilm);
