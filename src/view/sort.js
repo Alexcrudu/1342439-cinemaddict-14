@@ -16,13 +16,18 @@ export default class MainSort extends AbstractView {
     </ul>`;
   }
 
+
   _sortTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'A') {
       return;
     }
 
+    const activeSort = document.querySelector('.sort__button--active');
+
     evt.preventDefault();
     this._callback(evt.target.dataset.sortType);
+    activeSort.classList.remove('sort__button--active');
+    evt.target.classList.add('sort__button--active');
   }
 
   setSortTypeChangeHandler(callback) {

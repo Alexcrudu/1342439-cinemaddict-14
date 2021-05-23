@@ -1,9 +1,11 @@
 import SmartView from './smart.js';
 
 export default class FilmPopup extends SmartView {
-  constructor(film) {
+  constructor(film, comments) {
+    // debugger
     super();
     this._data = film;
+    this._comments = comments;
     this._eventHandler = this._eventHandler.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
@@ -12,7 +14,7 @@ export default class FilmPopup extends SmartView {
 
 
   getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments, isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments = this._comments, isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
     const isWishListChecked = isWishList ? 'checked' : '';
 
     const isWatchedListChecked = isWatched ? 'checked' : '';
@@ -150,6 +152,7 @@ export default class FilmPopup extends SmartView {
 
   _getCommentTemplate (comments) {
     return comments.map((comment) => {
+      this._comment = comment;
       return `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
@@ -175,12 +178,25 @@ export default class FilmPopup extends SmartView {
     }
   }
 
+
   setClickHandler(callback) {
     this._callback = callback;
     const closeButton = this.getElement().querySelector('.film-details__close-btn');
     closeButton.addEventListener('click', (e) => this._clickHandler(e, callback));
     this._container.addEventListener('keydown', (e) => this._eventHandler(e, callback));
   }
+
+  _eventHandlerDelete(evt, callback) {
+    evt.preventDefault();
+    callback(this._comment);
+  }
+
+  setDeleteHandler(callback) {
+    this._callback = callback;
+    const deleteButton = this.getElement().querySelector('.film-details__comment-delete');
+    deleteButton.addEventListener('click', (e) => this._eventHandlerDelete(e, callback));
+  }
+
 
   _clickHandler(evt, callback) {
     evt.preventDefault();
