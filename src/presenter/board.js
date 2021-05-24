@@ -12,6 +12,7 @@ import FilmCardPresenter from './film.js';
 
 const FILMS_COUNT_PER_STEP = 5;
 
+
 export default class Board {
   constructor(boardContainer, filmsModel, commentsModel) {
     this._boardContainer = boardContainer;
@@ -41,15 +42,15 @@ export default class Board {
   }
 
   init() {
-    this._siteMenuComponent = new SiteMenuView(this._getFilms());
     this._filmComponent = new FilmCardPresenter();
+    this._films = this._filmsModel.getFilms();
+    this._siteMenuComponent = new SiteMenuView(this._filmsModel.getFilms());
     this._renderBoard();
   }
 
   _getFilms() {
     switch (this._currentSort) {
       case SortType.DATE:
-
         return this._filmsModel.getFilms().slice().sort(sortByDate);
       case SortType.RATING:
         return this._filmsModel.getFilms().slice().sort(sortByRating);
@@ -59,27 +60,33 @@ export default class Board {
 
 
   _getMenu(){
+    this._films = this._filmsModel.getFilms();
+    this._currentSort = SortType.DEFAULT;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
-    const wishListFilms = this._filmsModel.getFilms().filter((film) => film.isWishList);
-    const watchedFilms = this._filmsModel.getFilms().filter((film) =>film.isWatched);
-    const favoriteFilms = this._filmsModel.getFilms().filter((film) =>film.isFavorite);
-    const allFilms = this._filmsModel.getFilms();
+    const wishListFilms = this._films.filter((film) => film.isWishList);
+    const watchedFilms = this._films.filter((film) =>film.isWatched);
+    const favoriteFilms = this._films.filter((film) =>film.isFavorite);
+    const allFilms = this._films;
     switch (this._currentMenuItem) {
       case MenuItem.WATCHLIST :
         this._clearFilmList();
-        this._renderFilms(wishListFilms);
+        this._films = wishListFilms;
+        this._renderFilms( 0, this._renderedFilmCount);
         break;
       case MenuItem.HISTORY :
         this._clearFilmList();
-        this._renderFilms(watchedFilms);
+        this._films = watchedFilms;
+        this._renderFilms( 0, this._renderedFilmCount);
         break;
       case MenuItem.FAVORITES:
+        this._films = favoriteFilms;
         this._clearFilmList();
-        this._renderFilms(favoriteFilms);
+        this._renderFilms(0, this._renderedFilmCount);
         break;
       default:
+        this._films = allFilms;
         this._clearFilmList();
-        this._renderFilms(allFilms);
+        this._renderFilms(0, this._renderedFilmCount);
     }
   }
 
@@ -121,34 +128,24 @@ export default class Board {
   }
 
 
-  _handleFilmChange(updateType, update) {
-    // handelviewaction
-    // Здесь будем вызывать обновление модели
-    // menuitem - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
-    // this._films = updateItem(this._films, renderedFilm);
-    // this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, renderedFilm);
-    this._filmsModel.updateFilm(updateType,update);
+  _handleFilmChange( update) {
+    this._filmsModel.updateFilm(update);
+    this._films = this._filmsModel.getFilms();
     this._clearFilmList();
-    this._renderedFilmsOnBoard();
+    this._renderFilms(0, Math.min(this._films.length, this._renderedFilmCount));
     remove(this._siteMenuComponent);
     this._siteMenuComponent = new SiteMenuView(this._getFilms());
     this._renderSiteMenu();
   }
 
   _handleModelEvent(updateType, update) {
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
     switch (updateType) {
       case UpdateType.PATCH:
         this._renderedFilmList[update.id].init(update);
         break;
       case UpdateType.MINOR:
         this._clearFilmList();
-        this._renderedFilmsOnBoard();
+        this._renderFilms( 0, Math.min(this._films.length, this._renderedFilmCount));
         break;
       case UpdateType.MAJOR:
         this._clearSort();
@@ -160,17 +157,12 @@ export default class Board {
   }
 
 
-  // _renderFilms(films, from, to,) {
-  //   this._films = films;
-  //   const filmsListSlice = this._films.slice(from, to);
-  //   filmsListSlice.forEach((film, index) => {
-  //     film.index = index;
-  //     this._renderFilm(film, index);
-  //   });
-  // }
-
-  _renderFilms(films) {
-    films.forEach((film) =>this._renderFilm(film));
+  _renderFilms( from, to) {
+    const filmsListSlice = this._films.slice(from, to);
+    filmsListSlice.forEach((film, index) => {
+      film.index = index;
+      this._renderFilm(film, index);
+    });
   }
 
 
@@ -195,7 +187,8 @@ export default class Board {
     this._currentSort = sortType;
 
     this._clearFilmList();
-    this._renderedFilmsOnBoard();
+    this._films = this._getFilms();
+    this._renderFilms(0, Math.min(this._films.length, this._renderedFilmCount));
   }
 
 
@@ -225,25 +218,12 @@ export default class Board {
 
     const newRenderedFilmCount = Math.min(filmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP);
 
-    const films = this._getFilms().slice(this._renderedFilmCount, newRenderedFilmCount);
 
-    this._renderFilms(films);
+    this._renderFilms(this._renderedFilmCount, newRenderedFilmCount);
     this._renderedFilmCount = newRenderedFilmCount;
 
     if (this._renderedFilmCount >= filmCount) {
       remove(this._showMoreButtonComponent);
-    }
-  }
-
-  _renderedFilmsOnBoard () {
-    const filmCount = this._getFilms().length;
-
-    const films = this._getFilms().slice(0, Math.min(filmCount, this._renderedFilmCount));
-
-    this._renderFilms(films);
-
-    if (filmCount > FILMS_COUNT_PER_STEP) {
-      this._renderShowMoreButton();
     }
   }
 
@@ -262,7 +242,15 @@ export default class Board {
       this._renderNoFilms();
     }
 
-    this._renderedFilmsOnBoard();
+    // const filmCount = this._getFilms().length;
+
+    // const films = this._getFilms();
+    this._renderFilms( 0, Math.min(this._films.length, this._renderedFilmCount));
+    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+
+    if (this._films.length > this._renderedFilmCount) {
+      this._renderShowMoreButton();
+    }
 
 
     this._renderTopRated();

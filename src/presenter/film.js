@@ -1,6 +1,7 @@
 import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
 import { renderElement, remove, RenderPosition} from '../utils/functions.js';
+// import { UpdateType } from '../const';
 import {UpdateType } from '../const.js';
 
 
@@ -45,29 +46,29 @@ export default class FilmCard {
 
       this._filmPopupComponent.setClickHandler(() => {
         remove(this._filmPopupComponent);
+      });
 
-        this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
-          this._handlerWishList(renderedFilm);
-        },
-        );
+      this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
+        this._handlerWishList(renderedFilm);
+      },
+      );
 
-        this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
-          this._handlerWatched(renderedFilm);
-        },
-        );
+      this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
+        this._handlerWatched(renderedFilm);
+      },
+      );
 
-        this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
-          this._handlerFavorite(renderedFilm);
-        },
-        );
+      this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
+        this._handlerFavorite(renderedFilm);
+      },
+      );
 
-        this._filmPopupComponent.setDeleteHandler((comment) => {
-          this._comments.deleteComment(comment);
-          remove(this._filmPopupComponent);
-          this._film.comments = this._getComments();
-          this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
-          this._filmPopupComponent.openElement();
-        });
+      this._filmPopupComponent.setDeleteHandler((comment) => {
+        this._comments.deleteComment(comment);
+        remove(this._filmPopupComponent);
+        this._film.comments = this._getComments();
+        this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
+        this._filmPopupComponent.openElement();
       });
 
 
@@ -91,8 +92,8 @@ export default class FilmCard {
 
 
   _handlerWishList(film) {
+    debugger
     this._changeData(
-      UpdateType.MINOR,
       Object.assign(
         {},
         film, { isWishList: !film.isWishList},
@@ -112,7 +113,6 @@ export default class FilmCard {
 
   _handlerFavorite(film) {
     this._changeData(
-      UpdateType.MINOR,
       Object.assign(
         {},
         film, { isFavorite: !film.isFavorite},
