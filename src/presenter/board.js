@@ -72,6 +72,8 @@ export default class Board {
         this._clearFilmList();
         this._films = wishListFilms;
         this._renderFilms( 0, this._renderedFilmCount);
+        // const filmCount = wishListFilms.length;
+        // console.log(this._renderedFilmCount, filmCount)
         break;
       case MenuItem.HISTORY :
         this._clearFilmList();
@@ -212,9 +214,9 @@ export default class Board {
   }
 
 
-  _handleShowMoreButtonClick() {
+  _handleShowMoreButtonClick() {;
 
-    const filmCount = this._getFilms().length;
+    const filmCount = this._films.length;
 
     const newRenderedFilmCount = Math.min(filmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP);
 

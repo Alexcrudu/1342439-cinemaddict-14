@@ -51,28 +51,6 @@ export default class FilmCard {
         remove(this._filmPopupComponent);
       });
 
-      // this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
-      //   this._handlerWishList(renderedFilm);
-      // },
-      // );
-
-      // this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
-      //   this._handlerWatched(renderedFilm);
-      // },
-      // );
-
-      // this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
-      //   this._handlerFavorite(renderedFilm);
-      // },
-      // );
-
-      // this._filmPopupComponent.setDeleteHandler((comment) => {
-      //   this._comments.deleteComment(comment);
-      //   remove(this._filmPopupComponent);
-      //   this._film.comments = this._getComments();
-      //   this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
-      //   this._filmPopupComponent.openElement();
-      // });
     });
 
     this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
@@ -93,10 +71,8 @@ export default class FilmCard {
     this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
 
     this._filmPopupComponent.setDeleteHandler((comment) => {
-      remove(this._filmPopupComponent);
       this._film.comments = this._comments.deleteComment(comment, this._filmComments);
-      this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
-      this._filmPopupComponent.openElement();
+      this._filmPopupComponent.updateComments(this._filmComments);
     });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
@@ -136,29 +112,17 @@ export default class FilmCard {
 
 
   _handlerWishList(film) {
-    this._changeData(
-      Object.assign(
-        {},
-        film, { isWishList: !film.isWishList},
-      ),
-    );
+    this._film.isWishList = !this._film.isWishList;
+    this._changeData(film);
   }
 
   _handlerWatched(film) {
-    this._changeData(
-      Object.assign(
-        {},
-        film, { isWatched: !film.isWatched},
-      ),
-    );
+    this._film.isWatched = !this._film.isWatched;
+    this._changeData(film);
   }
 
   _handlerFavorite(film) {
-    this._changeData(
-      Object.assign(
-        {},
-        film, { isFavorite: !film.isFavorite},
-      ),
-    );
+    this._film.isFavorite = !this._film.isFavorite;
+    this._changeData(film);
   }
 }
