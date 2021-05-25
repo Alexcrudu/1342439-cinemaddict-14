@@ -35,6 +35,7 @@ export default class FilmCard {
     renderElement(container, template, RenderPosition.BEFOREEND);
 
     this._setEventListeners(this._newFilmItem);
+    this._setPopupListeners(this._newFilmItem);
   }
 
   destroy() {
@@ -53,6 +54,47 @@ export default class FilmCard {
 
     });
 
+    // this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
+    //   this._handlerWishList(renderedFilm);
+    // },
+    // );
+
+    // this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
+    //   this._handlerWatched(renderedFilm);
+    // },
+    // );
+
+    // this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
+    //   this._handlerFavorite(renderedFilm);
+    // },
+    // );
+
+    // this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
+
+    // this._filmPopupComponent.setDeleteHandler((comment) => {
+    //   this._film.comments = this._comments.deleteComment(comment, this._filmComments);
+    //   this._filmPopupComponent.updateComments(this._film.comments);
+    // });
+
+    renderedFilm.setWatchListClickHandler((renderedFilm) => {
+      this._handlerWishList(renderedFilm);
+    },
+    );
+
+    renderedFilm.setWatchedClickHandler((renderedFilm) => {
+      this._handlerWatched(renderedFilm);
+    },
+    );
+
+    renderedFilm.setFavoriteClickHandler((renderedFilm) => {
+      this._handlerFavorite(renderedFilm);
+
+    },
+    );
+  }
+
+  _setPopupListeners (renderedFilm) {
+    this._renderedFilm = renderedFilm;
     this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
       this._handlerWishList(renderedFilm);
     },
@@ -73,23 +115,8 @@ export default class FilmCard {
     this._filmPopupComponent.setDeleteHandler((comment) => {
       this._film.comments = this._comments.deleteComment(comment, this._filmComments);
       this._filmPopupComponent.updateComments(this._film.comments);
+      this._resetListeners();
     });
-
-    renderedFilm.setWatchListClickHandler((renderedFilm) => {
-      this._handlerWishList(renderedFilm);
-    },
-    );
-
-    renderedFilm.setWatchedClickHandler((renderedFilm) => {
-      this._handlerWatched(renderedFilm);
-    },
-    );
-
-    renderedFilm.setFavoriteClickHandler((renderedFilm) => {
-      this._handlerFavorite(renderedFilm);
-
-    },
-    );
   }
 
   _handleCommentAddClick(comment) {
@@ -124,5 +151,9 @@ export default class FilmCard {
   _handlerFavorite(film) {
     this._film.isFavorite = !this._film.isFavorite;
     this._changeData(film);
+  }
+
+  _resetListeners () {
+    this._setPopupListeners(this._newFilmItem);
   }
 }

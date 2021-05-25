@@ -231,6 +231,7 @@ export default class FilmPopup extends SmartView {
   }
 
   _commentAddClickHandler(evt){
+    debugger
     if((evt.ctrlKey) && ((evt.key === 'Enter'))) {
       evt.preventDefault();
       const addCommentEmotion = document.querySelector('.film-details__add-emoji-label');
