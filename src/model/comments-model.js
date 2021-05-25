@@ -14,24 +14,12 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  deleteComment(update, commentsList) {
-    // debugger
-    // const index = this._comments.findIndex((comment) => comment.id === update.id);
+  deleteComment(update) {
 
-    // if (index === -1) {
-    //   throw new Error('Can\'t delete unexisting task');
-    // }
-
-    // this._comments = [
-    //   ...this._comments.slice(0, index),
-    //   ...this._comments.slice(index + 1),
-    // ];
-    this._commentsList = commentsList;
-
-    this._commentsList = this._commentsList.filter((comment) => comment.id !== update.id);
+    this._comments = this.getComments().filter((comment) => comment.id !== update.id);
 
     this._notify(update);
-    return this._commentsList;
+    return this._comments;
   }
 
   addComment(updateType, update) {

@@ -1,9 +1,14 @@
 import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
+import { generateCommentMock } from '../mock/comments.js';
+import CommentsModel from '../model/comments-model.js';
 import { renderElement, remove, RenderPosition, getRandomInteger} from '../utils/functions.js';
 // import {UpdateType } from '../const.js';
 
 const MAX_COMMENTS = 10;
+const RANDOM_COMMENTS = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
+const commentsModel = new CommentsModel();
+commentsModel.setComments(RANDOM_COMMENTS);
 
 
 export default class FilmCard {
@@ -15,20 +20,19 @@ export default class FilmCard {
     this._handleCommentAddClick = this._handleCommentAddClick.bind(this);
   }
 
-  init(container, film, comments) {
-    this._comments = comments;
+  init(container, film) {
+    this._comments = commentsModel;
     this._film = film;
-    this._filmComments = this._getComments();
-    this._film.comments = this._filmComments;
+    this._film.comments = commentsModel.getComments();
     this._newFilmItem = new FilmCardItemView(this._film);
-    this._filmPopupComponent = new FilmPopupView(this._film, this._comments);
+    this._filmPopupComponent = new FilmPopupView(this._film, this._comments._comments);
 
     this._renderFilm(container);
   }
 
-  _getComments() {
-    return this._comments.getComments().slice(0, getRandomInteger(0, MAX_COMMENTS));
-  }
+  // _getComments() {
+  //   return this._comments.getComments().slice(0, getRandomInteger(0, MAX_COMMENTS));
+  // }
 
   _renderFilm(container) {
     const template = this._newFilmItem.getElement();
@@ -113,7 +117,8 @@ export default class FilmCard {
     this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
 
     this._filmPopupComponent.setDeleteHandler((comment) => {
-      this._film.comments = this._comments.deleteComment(comment, this._filmComments);
+      this._comments.deleteComment(comment, this._filmComments);
+      this._film.comments = this._comments.getComments();
       this._filmPopupComponent.updateComments(this._film.comments);
       this._resetListeners();
     });

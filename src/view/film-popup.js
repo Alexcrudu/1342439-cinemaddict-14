@@ -2,11 +2,10 @@ import SmartView from './smart.js';
 import {generateCommentMock} from '../mock/comments.js';
 
 export default class FilmPopup extends SmartView {
-  constructor(film, comments) {
+  constructor(film) {
     // debugger
     super();
     this._data = film;
-    this._comments = comments;
     this._eventHandler = this._eventHandler.bind(this);
     this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
     this._container = document.querySelector('body');
@@ -17,7 +16,7 @@ export default class FilmPopup extends SmartView {
 
 
   getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments = this._comments, isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments , isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
     const isWishListChecked = isWishList ? 'checked' : '';
 
     const isWatchedListChecked = isWatched ? 'checked' : '';
@@ -161,7 +160,7 @@ export default class FilmPopup extends SmartView {
         <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-text">${comment.comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">Tim Macoveev</span>
           <span class="film-details__comment-day">${comment.date} </span>
@@ -231,7 +230,6 @@ export default class FilmPopup extends SmartView {
   }
 
   _commentAddClickHandler(evt){
-    debugger
     if((evt.ctrlKey) && ((evt.key === 'Enter'))) {
       evt.preventDefault();
       const addCommentEmotion = document.querySelector('.film-details__add-emoji-label');
@@ -246,7 +244,7 @@ export default class FilmPopup extends SmartView {
       }
 
       const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
-      this._callback.commentAddClick(addCommentObj);
+      this._callback(addCommentObj);
     }
 
     this._scrollToEmoji();

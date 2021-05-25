@@ -35,10 +35,10 @@ const generateDate = () => {
 };
 
 
-export const generateCommentMock = () => {
+export const generateCommentMock = (commentEmotion,newCommentText) => {
   return {
     id: nanoid(),
-    text: getRandomIndex(commentText),
+    comment: commentEmotion !== undefined ? newCommentText : getRandomIndex(commentText),
     emoji: getRandomIndex(emojies),
     author: 'author',
     date: generateDate(),
