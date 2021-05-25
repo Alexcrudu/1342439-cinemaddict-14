@@ -9,7 +9,7 @@ import CommentsModel from './model/comments-model.js';
 import { getRandomInteger} from './utils/functions.js';
 
 const FILMS_COUNT = 22;
-const MAX_COMMENTS = 7;
+const MAX_COMMENTS = 20;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
 const comments = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);

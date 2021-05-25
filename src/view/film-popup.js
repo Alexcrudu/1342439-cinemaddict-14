@@ -1,4 +1,5 @@
 import SmartView from './smart.js';
+import {generateCommentMock} from '../mock/comments.js';
 
 export default class FilmPopup extends SmartView {
   constructor(film, comments) {
@@ -9,6 +10,7 @@ export default class FilmPopup extends SmartView {
     this._eventHandler = this._eventHandler.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
+    this._commentAddClickHandler = this._commentAddClickHandler.bind(this);
     this.setCommentEmojiClickHandler();
   }
 
@@ -170,6 +172,18 @@ export default class FilmPopup extends SmartView {
 
   }
 
+  updateComments(data) {
+    this.updateData(
+      Object.assign(
+        {},
+        this._data,
+        {
+          comments: data,
+        },
+      ), false,
+    );
+  }
+
 
   _eventHandler(evt, callback) {
     evt.preventDefault();
@@ -194,7 +208,9 @@ export default class FilmPopup extends SmartView {
   setDeleteHandler(callback) {
     this._callback = callback;
     const deleteButton = this.getElement().querySelector('.film-details__comment-delete');
-    deleteButton.addEventListener('click', (e) => this._eventHandlerDelete(e, callback));
+    if(deleteButton) {
+      deleteButton.addEventListener('click', (e) => this._eventHandlerDelete(e, callback));
+    }
   }
 
 
@@ -213,6 +229,43 @@ export default class FilmPopup extends SmartView {
     this._container.removeChild(element);
     this._container.removeEventListener('keydown', this._eventHandler);
   }
+
+  _commentAddClickHandler(evt){
+    if((evt.ctrlKey) && ((evt.key === 'Enter'))) {
+      evt.preventDefault();
+      const addCommentEmotion = document.querySelector('.film-details__add-emoji-label');
+      const addCommentText = this.getElement().querySelector('.film-details__comment-input');
+
+      if(addCommentEmotion.firstChild === null){
+        return;
+      }
+
+      if(addCommentText.value.trim() === '') {
+        return;
+      }
+
+      const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
+      this._callback.commentAddClick(addCommentObj);
+    }
+
+    this._scrollToEmoji();
+  }
+
+  _scrollToEmoji(){
+    const newCommentEmoji = document.querySelector('.film-details__add-emoji-label');
+    if(newCommentEmoji !== null){
+      newCommentEmoji.scrollIntoView();
+    }
+  }
+
+  setCommentAddClickHandler(callback) {
+    this._callback.commentAddClick = callback;
+    const newCommentAdd = this.getElement().querySelector('.film-details__comment-input');
+    if(newCommentAdd !== null){
+      newCommentAdd.addEventListener('keypress', this._commentAddClickHandler);
+    }
+  }
+
 
   setWatchListClickHandler(callback) {
     this._callback = callback;
@@ -250,6 +303,8 @@ export default class FilmPopup extends SmartView {
       const inputHidden = document.getElementById(inputHiddenId.value);
       inputHidden.checked = true;
     }
+
+    this._scrollToEmoji();
 
     const newCommentEmoji = document.querySelector('.film-details__add-emoji-label');
     if(newCommentEmoji !== null) {
