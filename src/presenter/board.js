@@ -141,6 +141,7 @@ export default class Board {
   }
 
   _handleModelEvent(updateType, update) {
+    this._currentSort = SortType.DEFAULT;
     switch (updateType) {
       case UpdateType.PATCH:
         this._renderedFilmList[update.id].init(update);
@@ -214,7 +215,7 @@ export default class Board {
   }
 
 
-  _handleShowMoreButtonClick() {;
+  _handleShowMoreButtonClick() {
 
     const filmCount = this._films.length;
 

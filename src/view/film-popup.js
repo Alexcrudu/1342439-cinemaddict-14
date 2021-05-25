@@ -8,6 +8,7 @@ export default class FilmPopup extends SmartView {
     this._data = film;
     this._comments = comments;
     this._eventHandler = this._eventHandler.bind(this);
+    this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
     this._commentAddClickHandler = this._commentAddClickHandler.bind(this);
@@ -173,6 +174,7 @@ export default class FilmPopup extends SmartView {
   }
 
   updateComments(data) {
+    // debugger
     this.updateData(
       Object.assign(
         {},
@@ -257,7 +259,7 @@ export default class FilmPopup extends SmartView {
   }
 
   setCommentAddClickHandler(callback) {
-    this._callback.commentAddClick = callback;
+    this._callback = callback;
     const newCommentAdd = this.getElement().querySelector('.film-details__comment-input');
     if(newCommentAdd !== null){
       newCommentAdd.addEventListener('keypress', this._commentAddClickHandler);

@@ -72,7 +72,7 @@ export default class FilmCard {
 
     this._filmPopupComponent.setDeleteHandler((comment) => {
       this._film.comments = this._comments.deleteComment(comment, this._filmComments);
-      this._filmPopupComponent.updateComments(this._filmComments);
+      this._filmPopupComponent.updateComments(this._film.comments);
     });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
