@@ -124,16 +124,26 @@ export default class FilmCard {
     });
   }
 
-  _handleCommentAddClick(comment) {
-    this._comments.addComment(comment);
-    this._film.comments = this._comments.getComments();
+  // _handleCommentAddClick(comment) {
+  //   // debugger
+  //   this._comments.addComment(comment);
+  //   this._film.comments = this._comments.getComments();
 
-    this._filmPopupComponent.updateComments(this._film.comments);
+  //   this._filmPopupComponent.updateComments(this._film.comments);
+  // }
+
+  _handleCommentAddClick(comment) {
+    const existingComments = this._film.comments;
+    existingComments.push(comment);
+    this._film.comments = existingComments;
+
+
+    this._filmDetailsComponent.updateComments(this._film.comments);
   }
 
 
+
   _handlerWishList(film) {
-    // debugger
     this._film.isWishList = !this._film.isWishList;
     this._changeData(film);
   }

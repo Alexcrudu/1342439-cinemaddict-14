@@ -230,7 +230,9 @@ export default class FilmPopup extends SmartView {
   }
 
   _commentAddClickHandler(evt){
-    if((evt.ctrlKey) && ((evt.key === 'Enter'))) {
+
+    if(evt.keyCode === 13 && evt.metaKey || evt.ctrlKey) {
+
       evt.preventDefault();
       const addCommentEmotion = document.querySelector('.film-details__add-emoji-label');
       const addCommentText = this.getElement().querySelector('.film-details__comment-input');
@@ -242,6 +244,7 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
+      debugger
 
       const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
       this._callback(addCommentObj);
@@ -258,11 +261,11 @@ export default class FilmPopup extends SmartView {
   }
 
   setCommentAddClickHandler(callback) {
-    // debugger
+    // debugger;
     this._callback = callback;
     const newCommentAdd = this.getElement().querySelector('.film-details__comment-input');
     if(newCommentAdd !== null){
-      newCommentAdd.addEventListener('keypress', this._commentAddClickHandler);
+      newCommentAdd.addEventListener('keydown', this._commentAddClickHandler);
     }
   }
 
@@ -287,8 +290,8 @@ export default class FilmPopup extends SmartView {
 
 
   _commentEmojiClickHandler(evt) {
-    evt.preventDefault();
     if(evt.target.tagName === 'IMG') {
+      evt.preventDefault();
       this.updateData(
         Object.assign(
           {},
@@ -328,6 +331,7 @@ export default class FilmPopup extends SmartView {
     this.setWatchedClickHandler(this._callback);
     this.setWatchListClickHandler(this._callback);
     this.setFavoriteClickHandler(this._callback);
+    this.setCommentAddClickHandler();
   }
 
 }
