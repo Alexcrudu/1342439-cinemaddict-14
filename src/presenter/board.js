@@ -60,8 +60,6 @@ export default class Board {
 
 
   _getMenu(){
-    this._films = this._filmsModel.getFilms();
-    this._currentSort = SortType.DEFAULT;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const wishListFilms = this._films.filter((film) => film.isWishList);
     const watchedFilms = this._films.filter((film) =>film.isWatched);
@@ -69,6 +67,8 @@ export default class Board {
     const allFilms = this._films;
     switch (this._currentMenuItem) {
       case MenuItem.WATCHLIST :
+        this._currentSort = SortType.DEFAULT;
+        this._sortComponent.resetSortTypeHandler();
         this._clearFilmList();
         this._films = wishListFilms;
         this._renderFilms( 0, this._renderedFilmCount);
@@ -76,11 +76,15 @@ export default class Board {
         // console.log(this._renderedFilmCount, filmCount)
         break;
       case MenuItem.HISTORY :
+        this._currentSort = SortType.DEFAULT;
+        this._sortComponent.resetSortTypeHandler();
         this._clearFilmList();
         this._films = watchedFilms;
         this._renderFilms( 0, this._renderedFilmCount);
         break;
       case MenuItem.FAVORITES:
+        this._currentSort = SortType.DEFAULT;
+        this._sortComponent.resetSortTypeHandler();
         this._films = favoriteFilms;
         this._clearFilmList();
         this._renderFilms(0, this._renderedFilmCount);
@@ -136,8 +140,10 @@ export default class Board {
     this._clearFilmList();
     this._renderFilms(0, Math.min(this._films.length, this._renderedFilmCount));
     remove(this._siteMenuComponent);
-    this._siteMenuComponent = new SiteMenuView(this._getFilms());
+    this._siteMenuComponent = new SiteMenuView(this._films);
     this._renderSiteMenu();
+    this._getMenu();
+    this._siteMenuComponent.resetMenuItemHandler(this._currentMenuItem);
   }
 
   _handleModelEvent(updateType, update) {

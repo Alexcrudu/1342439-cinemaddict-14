@@ -187,8 +187,8 @@ export default class FilmPopup extends SmartView {
 
 
   _eventHandler(evt, callback) {
-    evt.preventDefault();
     if (evt.key === 'Escape') {
+      evt.preventDefault();
       callback(this._data);
     }
   }
@@ -258,6 +258,7 @@ export default class FilmPopup extends SmartView {
   }
 
   setCommentAddClickHandler(callback) {
+    // debugger
     this._callback = callback;
     const newCommentAdd = this.getElement().querySelector('.film-details__comment-input');
     if(newCommentAdd !== null){

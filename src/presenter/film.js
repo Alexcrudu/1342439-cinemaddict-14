@@ -125,25 +125,15 @@ export default class FilmCard {
   }
 
   _handleCommentAddClick(comment) {
-    const existingComments = this._film.comments;
-    existingComments.push(comment);
-    const newObject = Object.assign(
-      {},
-      this._film,
-      {
-        comments: existingComments,
-      },
-    );
+    this._comments.addComment(comment);
+    this._film.comments = this._comments.getComments();
 
-    this._changeData(
-      newObject,
-    );
-
-    this._filmPopupComponent.updateComments(newObject.comments);
+    this._filmPopupComponent.updateComments(this._film.comments);
   }
 
 
   _handlerWishList(film) {
+    // debugger
     this._film.isWishList = !this._film.isWishList;
     this._changeData(film);
   }

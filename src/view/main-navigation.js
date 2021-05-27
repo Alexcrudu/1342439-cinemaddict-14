@@ -38,6 +38,13 @@ export default class SiteMenu extends AbstractView {
     activeItem.classList.remove('main-navigation__item--active');
     evt.target.classList.add('main-navigation__item--active');
   }
+  resetMenuItemHandler(curentMenuItem) {
+    const activeMenu = document.querySelector('.main-navigation__item--active');
+    activeMenu.classList.remove('main-navigation__item--active');
+    const menuDataset = document.querySelector(`[data-menu-item = ${curentMenuItem}]`);
+    menuDataset.classList.add('main-navigation__item--active');
+
+  }
 
   setMenuItemChangeHandler(callback) {
     this._callback = callback;

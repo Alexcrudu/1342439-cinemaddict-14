@@ -30,6 +30,15 @@ export default class MainSort extends AbstractView {
     evt.target.classList.add('sort__button--active');
   }
 
+  resetSortTypeHandler () {
+    const activeSort = document.querySelector('.sort__button--active');
+    activeSort.classList.remove('sort__button--active');
+    const sortDataset = document.querySelector('[data-sort-type = "default"]');
+    sortDataset.classList.add('sort__button--active');
+
+  }
+
+
   setSortTypeChangeHandler(callback) {
     this._callback = callback;
     this.getElement().addEventListener('click', this._sortTypeChangeHandler);

@@ -22,12 +22,13 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, update) {
-    this._tasks = [
+  addComment( update) {
+    this._comments = [
       update,
-      ...this._tasks,
+      ...this._comments,
     ];
 
-    this._notify(updateType, update);
+    this._notify( update);
+    return this._comments;
   }
 }
