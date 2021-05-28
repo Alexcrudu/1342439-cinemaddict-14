@@ -201,7 +201,7 @@ export default class FilmPopup extends SmartView {
 
   _eventHandlerDelete(evt, callback) {
     evt.preventDefault();
-    callback(this._comment);
+    callback(evt.target.dataset.id);
   }
 
   setDeleteHandler(callback) {

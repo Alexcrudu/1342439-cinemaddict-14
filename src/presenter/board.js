@@ -61,10 +61,10 @@ export default class Board {
 
   _getMenu(){
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
-    const wishListFilms = this._films.filter((film) => film.isWishList);
-    const watchedFilms = this._films.filter((film) =>film.isWatched);
-    const favoriteFilms = this._films.filter((film) =>film.isFavorite);
-    const allFilms = this._films;
+    const allFilms = this._getFilms();
+    const wishListFilms = allFilms.filter((film) => film.isWishList);
+    const watchedFilms = allFilms.filter((film) =>film.isWatched);
+    const favoriteFilms = allFilms.filter((film) =>film.isFavorite);
     switch (this._currentMenuItem) {
       case MenuItem.WATCHLIST :
         this._currentSort = SortType.DEFAULT;

@@ -89,8 +89,9 @@ export default class FilmCard {
     );
 
 
-    this._filmPopupComponent.setDeleteHandler((comment) => {
-      this._comments.deleteComment(comment, this._filmComments);
+    this._filmPopupComponent.setDeleteHandler((id) => {
+      debugger
+      this._comments.deleteComment(id);
       this._film.comments = this._comments.getComments();
       this._filmPopupComponent.updateComments(this._film.comments);
       this._resetListeners();

@@ -14,11 +14,11 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  deleteComment(update) {
+  deleteComment(id) {
 
-    this._comments = this.getComments().filter((comment) => comment.id !== update.id);
+    this._comments = this.getComments().filter((comment) => comment.id !== id);
 
-    this._notify(update);
+    this._notify(id);
     return this._comments;
   }
 
@@ -28,7 +28,7 @@ export default class Comments extends Observer {
       ...this._comments,
     ];
 
-    this._notify( update);
+    this._notify(update);
     return this._comments;
   }
 }
