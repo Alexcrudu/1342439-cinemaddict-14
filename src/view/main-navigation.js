@@ -27,37 +27,37 @@ export default class SiteMenu extends AbstractView {
   </nav>`;
   }
 
-  _clickHandler(evt) {
+  _clickHandler(evt, callback) {
     evt.preventDefault();
-    this._callback();
+    callback();
   }
 
   statisticClickHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const statistic = this.getElement().querySelector('.main-navigation__additional');
-    statistic.addEventListener('click', this._clickHandler);
+    statistic.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
-  _menuItemChangeHandler(evt) {
+  _menuItemChangeHandler(evt, callback) {
+    //ßdebugger
     if (evt.target.tagName !== 'A') {
       return;
     }
 
-    const statistic = this.getElement().querySelector('.main-navigation__additional');
+    //const statistic = this.getElement().querySelector('.main-navigation__additional');
 
-    if (evt.target === statistic) {
+    if (evt.target.classList.contains('main-navigation__additional')) {
       return;
     }
 
     const activeItem = document.querySelector('.main-navigation__item--active');
 
     evt.preventDefault();
-    this._callback(evt.target.dataset.menuItem);
+    callback(evt.target.dataset.menuItem);
     activeItem.classList.remove('main-navigation__item--active');
     evt.target.classList.add('main-navigation__item--active');
   }
 
-  
   resetMenuItemHandler(curentMenuItem) {
     const activeMenu = document.querySelector('.main-navigation__item--active');
     activeMenu.classList.remove('main-navigation__item--active');
@@ -67,7 +67,7 @@ export default class SiteMenu extends AbstractView {
   }
 
   setMenuItemChangeHandler(callback) {
-    this._callback = callback;
-    this.getElement().addEventListener('click', this._menuItemChangeHandler);
+    // this._callback = callback;
+    this.getElement().addEventListener('click', (e) => this._menuItemChangeHandler(e, callback));
   }
 }

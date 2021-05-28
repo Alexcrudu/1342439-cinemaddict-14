@@ -76,7 +76,7 @@ export default class Board {
     this._mostCommentedComponent.show();
     this._topRatedComponent.show();
     this._sortComponent.show();
-    this._statisticPresenter.removeStatistic();
+    // this._statisticPresenter.removeStatistic();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const allFilms = this._getFilms();
     const wishListFilms = allFilms.filter((film) => film.isWishList);
@@ -270,6 +270,8 @@ export default class Board {
 
   _renderBoard(){
 
+    this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
+
     this._renderSiteMenu();
 
     this._renderSort();
@@ -297,6 +299,6 @@ export default class Board {
 
     this._renderMostCommented();
 
-    this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
+    // this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
   }
 }
