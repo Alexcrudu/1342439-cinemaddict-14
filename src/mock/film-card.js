@@ -1,6 +1,4 @@
-import {getRandomInteger} from '../utils/functions.js';
-import {getRandomIndex} from '../utils/functions.js';
-// import {generateFilmComments} from './comments.js';
+import {getRandomInteger, getRandomIndex, getWatchedData} from '../utils/functions.js';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 
@@ -41,17 +39,6 @@ const filmsTitle = [
   'let it be',
 ];
 
-const time = [
-  '1h 34m',
-  '1h 57m',
-  '1h 26m',
-  '1h 41m',
-  '1h 55m',
-  '58m',
-  '2h 08m',
-  '2h 16',
-  '2h 25m',
-];
 
 const generateGenre = () => {
   const genre = [
@@ -164,7 +151,7 @@ export const generateFilmCard = () => {
     alternativeFilmName: getRandomIndex(filmsTitle),
     rating: getRandomInteger(MIN_RATING, MAX_RATING) + '.' + getRandomInteger(MIN_RATING, MAX_RATING),
     year: getRandomInteger(MIN_YEAR, MAX_YEAR),
-    duration: getRandomIndex(time),
+    duration: getRandomInteger(30, 150),
     ageRating: getRandomInteger(MIN_AGE, MAX_AGE),
     directors: getRandomIndex(filmDirectors),
     writers: getRandomIndex(filmWriters),
@@ -176,7 +163,7 @@ export const generateFilmCard = () => {
     coutry: getRandomIndex(country),
     runtime: getRandomInteger(0, MAX_RUNTIME),
     isWishList: Boolean(getRandomInteger(0, 1)),
-    isWatched: Boolean(getRandomInteger(0, 1)),
+    watched: getWatchedData(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };

@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 
 
 const emojies = ['smile', 'sleeping', 'puke', 'angry'];
-// const MAX_COMMENTS = 7;
 
 const commentText = [
   'The words on screen often pass by too quickly to read or comprehend in full',

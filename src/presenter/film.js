@@ -2,7 +2,7 @@ import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
 import { generateCommentMock } from '../mock/comments.js';
 import CommentsModel from '../model/comments-model.js';
-import { renderElement, remove, RenderPosition, getRandomInteger} from '../utils/functions.js';
+import { renderElement, remove, RenderPosition, getRandomInteger, getUtcDateNow} from '../utils/functions.js';
 
 const MAX_COMMENTS = 10;
 const RANDOM_COMMENTS = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
@@ -113,7 +113,8 @@ export default class FilmCard {
   }
 
   _handlerWatched(film) {
-    this._film.isWatched = !this._film.isWatched;
+    this._film.watched.already_watched = !this._film.watched.already_watched;
+    this._film.watched.watching_date = this._film.watched.already_watched ? '' : getUtcDateNow();
     this._changeData(film);
   }
 

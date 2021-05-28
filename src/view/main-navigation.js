@@ -6,12 +6,13 @@ export default class SiteMenu extends AbstractView {
     this._films = films;
 
     this._menuItemChangeHandler = this._menuItemChangeHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     const filtredFilmsCount = this._films.filter((film) => film.isFavorite).length;
 
-    const watchedFilmsCount = this._films.filter((film) => film.isWatched).length;
+    const watchedFilmsCount = this._films.filter((film) => film.watched.already_watched).length;
 
     const wishedFilmsCount = this._films.filter((film) => film.isWishList).length;
 
@@ -26,8 +27,25 @@ export default class SiteMenu extends AbstractView {
   </nav>`;
   }
 
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback();
+  }
+
+  statisticClickHandler(callback) {
+    this._callback = callback;
+    const statistic = this.getElement().querySelector('.main-navigation__additional');
+    statistic.addEventListener('click', this._clickHandler);
+  }
+
   _menuItemChangeHandler(evt) {
     if (evt.target.tagName !== 'A') {
+      return;
+    }
+
+    const statistic = this.getElement().querySelector('.main-navigation__additional');
+
+    if (evt.target === statistic) {
       return;
     }
 
@@ -38,6 +56,8 @@ export default class SiteMenu extends AbstractView {
     activeItem.classList.remove('main-navigation__item--active');
     evt.target.classList.add('main-navigation__item--active');
   }
+
+  
   resetMenuItemHandler(curentMenuItem) {
     const activeMenu = document.querySelector('.main-navigation__item--active');
     activeMenu.classList.remove('main-navigation__item--active');

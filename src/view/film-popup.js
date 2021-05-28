@@ -1,5 +1,6 @@
 import SmartView from './smart.js';
 import {generateCommentMock} from '../mock/comments.js';
+import {getHumanizeDuration} from '../utils/functions.js';
 
 export default class FilmPopup extends SmartView {
   constructor(film)
@@ -16,10 +17,10 @@ export default class FilmPopup extends SmartView {
 
 
   getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments , isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments , isWishList, watched, isFavorite, newCommentEmoji = ''} = this._data;
     const isWishListChecked = isWishList ? 'checked' : '';
 
-    const isWatchedListChecked = isWatched ? 'checked' : '';
+    const isWatchedListChecked = watched.already_watched ? 'checked' : '';
 
     const isFavoriteListChecked = isFavorite ? 'checked' : '';
 
@@ -75,7 +76,7 @@ export default class FilmPopup extends SmartView {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getHumanizeDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
