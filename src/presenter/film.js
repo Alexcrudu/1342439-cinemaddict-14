@@ -90,7 +90,6 @@ export default class FilmCard {
 
 
     this._filmPopupComponent.setDeleteHandler((id) => {
-      debugger
       this._comments.deleteComment(id);
       this._film.comments = this._comments.getComments();
       this._filmPopupComponent.updateComments(this._film.comments);
@@ -101,8 +100,6 @@ export default class FilmCard {
   }
 
   _handleCommentAddClick(comment) {
-    // const existingComments = this._film.comments;
-    // existingComments.push(comment);
     this._film.comments.push(comment);
 
 
