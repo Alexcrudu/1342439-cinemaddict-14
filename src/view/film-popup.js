@@ -2,8 +2,8 @@ import SmartView from './smart.js';
 import {generateCommentMock} from '../mock/comments.js';
 
 export default class FilmPopup extends SmartView {
-  constructor(film) {
-    // debugger
+  constructor(film)
+  {
     super();
     this._data = film;
     this._eventHandler = this._eventHandler.bind(this);
@@ -173,7 +173,6 @@ export default class FilmPopup extends SmartView {
   }
 
   updateComments(data) {
-    // debugger
     this.updateData(
       Object.assign(
         {},
@@ -195,7 +194,6 @@ export default class FilmPopup extends SmartView {
 
 
   setClickHandler(callback) {
-    this._callback = callback;
     const closeButton = this.getElement().querySelector('.film-details__close-btn');
     closeButton.addEventListener('click', (e) => this._clickHandler(e, callback));
     this._container.addEventListener('keydown', (e) => this._eventHandler(e, callback));
@@ -244,7 +242,6 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
-      debugger
 
       const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
       this._callback(addCommentObj);
@@ -261,7 +258,6 @@ export default class FilmPopup extends SmartView {
   }
 
   setCommentAddClickHandler(callback) {
-    // debugger;
     this._callback = callback;
     const newCommentAdd = this.getElement().querySelector('.film-details__comment-input');
     if(newCommentAdd !== null){
@@ -331,7 +327,7 @@ export default class FilmPopup extends SmartView {
     this.setWatchedClickHandler(this._callback);
     this.setWatchListClickHandler(this._callback);
     this.setFavoriteClickHandler(this._callback);
-    this.setCommentAddClickHandler();
+    this.setCommentAddClickHandler(this._callback);
   }
 
 }

@@ -45,14 +45,3 @@ export const generateCommentMock = (commentEmotion,newCommentText) => {
   };
 };
 
-//  const generateFilmComments = () => {
-// const filmComments = new Set ();
-
-// for (let i=0; i < getRandomInteger(1, MAX_COMMENTS); i++) {
-//   filmComments.add(generateCommentMock());
-// }
-// const comments = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
-
-// return Array.from(filmComments);
-// return comments;
-// };

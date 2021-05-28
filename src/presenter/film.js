@@ -3,7 +3,6 @@ import FilmPopupView from '../view/film-popup.js';
 import { generateCommentMock } from '../mock/comments.js';
 import CommentsModel from '../model/comments-model.js';
 import { renderElement, remove, RenderPosition, getRandomInteger} from '../utils/functions.js';
-// import {UpdateType } from '../const.js';
 
 const MAX_COMMENTS = 10;
 const RANDOM_COMMENTS = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
@@ -30,10 +29,6 @@ export default class FilmCard {
     this._renderFilm(container);
   }
 
-  // _getComments() {
-  //   return this._comments.getComments().slice(0, getRandomInteger(0, MAX_COMMENTS));
-  // }
-
   _renderFilm(container) {
     const template = this._newFilmItem.getElement();
     renderElement(container, template, RenderPosition.BEFOREEND);
@@ -58,27 +53,6 @@ export default class FilmCard {
 
     });
 
-    // this._filmPopupComponent.setWatchListClickHandler((renderedFilm) => {
-    //   this._handlerWishList(renderedFilm);
-    // },
-    // );
-
-    // this._filmPopupComponent.setWatchedClickHandler((renderedFilm) => {
-    //   this._handlerWatched(renderedFilm);
-    // },
-    // );
-
-    // this._filmPopupComponent.setFavoriteClickHandler((renderedFilm) => {
-    //   this._handlerFavorite(renderedFilm);
-    // },
-    // );
-
-    // this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
-
-    // this._filmPopupComponent.setDeleteHandler((comment) => {
-    //   this._film.comments = this._comments.deleteComment(comment, this._filmComments);
-    //   this._filmPopupComponent.updateComments(this._film.comments);
-    // });
 
     renderedFilm.setWatchListClickHandler((renderedFilm) => {
       this._handlerWishList(renderedFilm);
@@ -114,7 +88,6 @@ export default class FilmCard {
     },
     );
 
-    this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
 
     this._filmPopupComponent.setDeleteHandler((comment) => {
       this._comments.deleteComment(comment, this._filmComments);
@@ -122,25 +95,18 @@ export default class FilmCard {
       this._filmPopupComponent.updateComments(this._film.comments);
       this._resetListeners();
     });
+
+    this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
   }
-
-  // _handleCommentAddClick(comment) {
-  //   // debugger
-  //   this._comments.addComment(comment);
-  //   this._film.comments = this._comments.getComments();
-
-  //   this._filmPopupComponent.updateComments(this._film.comments);
-  // }
 
   _handleCommentAddClick(comment) {
-    const existingComments = this._film.comments;
-    existingComments.push(comment);
-    this._film.comments = existingComments;
+    // const existingComments = this._film.comments;
+    // existingComments.push(comment);
+    this._film.comments.push(comment);
 
 
-    this._filmDetailsComponent.updateComments(this._film.comments);
+    this._filmPopupComponent.updateComments(this._film.comments);
   }
-
 
 
   _handlerWishList(film) {
