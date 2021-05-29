@@ -108,6 +108,7 @@ export default class FilmCard {
 
 
   _handlerWishList(film) {
+    // debugger
     this._film.isWishList = !this._film.isWishList;
     this._changeData(film);
   }

@@ -24,7 +24,7 @@ export const renderTemplate = (container, template) => {
 };
 
 export const sortByDate = (filmA, filmB) => {
-  return dayjs(filmA.date).diff(dayjs(filmB.date));
+  return dayjs(filmB.year).diff(dayjs(filmA.year));
 };
 
 export const sortByRating = (filmA, filmB) => {

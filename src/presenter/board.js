@@ -20,10 +20,10 @@ const FILMS_COUNT_PER_STEP = 5;
 
 
 export default class Board {
-  constructor(boardContainer, filmsModel, commentsModel) {
+  constructor(boardContainer, filmsModel) {
     this._boardContainer = boardContainer;
     this._filmsModel = filmsModel;
-    this._commentsModel = commentsModel;
+    // this._commentsModel = commentsModel;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;

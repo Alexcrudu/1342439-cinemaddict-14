@@ -243,8 +243,10 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
+      // const text = addCommentText.value;
 
-      const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
+      const emoji = addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0];
+      const addCommentObj = generateCommentMock(emoji , addCommentText.value);
       this._callback(addCommentObj);
     }
 
@@ -268,19 +270,20 @@ export default class FilmPopup extends SmartView {
 
 
   setWatchListClickHandler(callback) {
-    this._callback = callback;
+    // debugger
+    // callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
     watchList.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-details__control-input--watched');
     watchedFilm.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
     favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
@@ -289,15 +292,15 @@ export default class FilmPopup extends SmartView {
   _commentEmojiClickHandler(evt) {
     if(evt.target.tagName === 'IMG') {
       evt.preventDefault();
+      const addCommentText = this.getElement().querySelector('.film-details__comment-input');
+      const commentValue = addCommentText.value;
+
+      this._data.newCommentEmoji = evt.target.src,
       this.updateData(
-        Object.assign(
-          {},
-          this._data,
-          {
-            newCommentEmoji: evt.target.src,
-          },
-        ), false,
+        this._data.newCommentEmoji,
       );
+
+      this.getElement().querySelector('.film-details__comment-input').value = commentValue;
 
       const inputHiddenId = evt.target.parentElement.attributes['for'];
       const inputHidden = document.getElementById(inputHiddenId.value);

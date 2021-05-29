@@ -167,3 +167,4 @@ export const generateFilmCard = () => {
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };
+
