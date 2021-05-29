@@ -1,5 +1,6 @@
 import AbstractView from './abstract.js';
 
+
 export default class FilmCardItem extends AbstractView {
   constructor(film) {
     super();
@@ -39,6 +40,7 @@ export default class FilmCardItem extends AbstractView {
     evt.preventDefault();
     callback(this._film);
   }
+
 
   setClickHandlerPoster(callback) {
     this._callback = callback;

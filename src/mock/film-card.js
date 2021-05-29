@@ -1,6 +1,6 @@
-import {getRandomInteger} from '../utils.js';
-import {getRandomIndex} from '../utils.js';
-import {generateFilmComments} from './comments.js';
+import {getRandomInteger} from '../utils/functions.js';
+import {getRandomIndex} from '../utils/functions.js';
+// import {generateFilmComments} from './comments.js';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 
@@ -170,7 +170,7 @@ export const generateFilmCard = () => {
     writers: getRandomIndex(filmWriters),
     genre: generateGenre(),
     description: generateDescription(),
-    comments: generateFilmComments(),
+    comments: 'comments',
     actors: generateActors(),
     date: generateDate(),
     coutry: getRandomIndex(country),

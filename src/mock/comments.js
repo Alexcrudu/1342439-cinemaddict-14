@@ -1,10 +1,10 @@
-import {getRandomIndex, getRandomInteger} from '../utils.js';
+import {getRandomIndex, getRandomInteger} from '../utils/functions.js';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 
 
 const emojies = ['smile', 'sleeping', 'puke', 'angry'];
-const MAX_COMMENTS = 7;
+// const MAX_COMMENTS = 7;
 
 const commentText = [
   'The words on screen often pass by too quickly to read or comprehend in full',
@@ -35,24 +35,13 @@ const generateDate = () => {
 };
 
 
-const generateCommentMock = () => {
+export const generateCommentMock = (commentEmotion,newCommentText) => {
   return {
     id: nanoid(),
-    text: getRandomIndex(commentText),
+    comment: commentEmotion !== undefined ? newCommentText : getRandomIndex(commentText),
     emoji: getRandomIndex(emojies),
     author: 'author',
     date: generateDate(),
   };
 };
 
-export const generateFilmComments = () => {
-  // const filmComments = new Set ();
-
-  // for (let i=0; i < getRandomInteger(1, MAX_COMMENTS); i++) {
-  //   filmComments.add(generateCommentMock());
-  // }
-  const comments = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
-
-  // return Array.from(filmComments);
-  return comments;
-};
