@@ -1,5 +1,6 @@
 import SmartView from './smart.js';
 import {generateCommentMock} from '../mock/comments.js';
+import {getHumanizeDuration} from '../utils/functions.js';
 
 export default class FilmPopup extends SmartView {
   constructor(film)
@@ -16,10 +17,10 @@ export default class FilmPopup extends SmartView {
 
 
   getTemplate() {
-    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments , isWishList, isWatched, isFavorite, newCommentEmoji = ''} = this._data;
+    const {poster, filmName, alternativeFilmName, ageRating, directors, writers, actors, date, country, rating, duration, description, comments , isWishList, watched, isFavorite, newCommentEmoji = ''} = this._data;
     const isWishListChecked = isWishList ? 'checked' : '';
 
-    const isWatchedListChecked = isWatched ? 'checked' : '';
+    const isWatchedListChecked = watched.already_watched ? 'checked' : '';
 
     const isFavoriteListChecked = isFavorite ? 'checked' : '';
 
@@ -75,7 +76,7 @@ export default class FilmPopup extends SmartView {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getHumanizeDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -242,8 +243,10 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
+      // const text = addCommentText.value;
 
-      const addCommentObj = generateCommentMock(addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0], addCommentText.value);
+      const emoji = addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0];
+      const addCommentObj = generateCommentMock(emoji , addCommentText.value);
       this._callback(addCommentObj);
     }
 
@@ -267,19 +270,20 @@ export default class FilmPopup extends SmartView {
 
 
   setWatchListClickHandler(callback) {
-    this._callback = callback;
+    // debugger
+    // callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
     watchList.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-details__control-input--watched');
     watchedFilm.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
     favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
@@ -288,15 +292,15 @@ export default class FilmPopup extends SmartView {
   _commentEmojiClickHandler(evt) {
     if(evt.target.tagName === 'IMG') {
       evt.preventDefault();
+      const addCommentText = this.getElement().querySelector('.film-details__comment-input');
+      const commentValue = addCommentText.value;
+
+      this._data.newCommentEmoji = evt.target.src,
       this.updateData(
-        Object.assign(
-          {},
-          this._data,
-          {
-            newCommentEmoji: evt.target.src,
-          },
-        ), false,
+        this._data.newCommentEmoji,
       );
+
+      this.getElement().querySelector('.film-details__comment-input').value = commentValue;
 
       const inputHiddenId = evt.target.parentElement.attributes['for'];
       const inputHidden = document.getElementById(inputHiddenId.value);

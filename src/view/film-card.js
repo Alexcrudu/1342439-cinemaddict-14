@@ -9,11 +9,11 @@ export default class FilmCardItem extends AbstractView {
   }
 
   getTemplate() {
-    const {poster, filmName, rating, year, duration, genre, description, comments, isWishList, isWatched, isFavorite} = this._film;
+    const {poster, filmName, rating, year, duration, genre, description, comments, isWishList, watched, isFavorite} = this._film;
 
     const isWishListClassName = isWishList ? 'film-card__controls-item--active' : '';
 
-    const isWatchedListClassName = isWatched ? 'film-card__controls-item--active' : '';
+    const isWatchedListClassName = watched.already_watched ? 'film-card__controls-item--active' : '';
 
     const isFavoriteListClassName = isFavorite ? 'film-card__controls-item--active' : '';
 

@@ -6,12 +6,13 @@ export default class SiteMenu extends AbstractView {
     this._films = films;
 
     this._menuItemChangeHandler = this._menuItemChangeHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     const filtredFilmsCount = this._films.filter((film) => film.isFavorite).length;
 
-    const watchedFilmsCount = this._films.filter((film) => film.isWatched).length;
+    const watchedFilmsCount = this._films.filter((film) => film.watched.already_watched).length;
 
     const wishedFilmsCount = this._films.filter((film) => film.isWishList).length;
 
@@ -26,18 +27,37 @@ export default class SiteMenu extends AbstractView {
   </nav>`;
   }
 
-  _menuItemChangeHandler(evt) {
+  _clickHandler(evt, callback) {
+    evt.preventDefault();
+    callback();
+  }
+
+  statisticClickHandler(callback) {
+    // this._callback = callback;
+    const statistic = this.getElement().querySelector('.main-navigation__additional');
+    statistic.addEventListener('click', (e) => this._clickHandler(e, callback));
+  }
+
+  _menuItemChangeHandler(evt, callback) {
+    //ßdebugger
     if (evt.target.tagName !== 'A') {
+      return;
+    }
+
+    //const statistic = this.getElement().querySelector('.main-navigation__additional');
+
+    if (evt.target.classList.contains('main-navigation__additional')) {
       return;
     }
 
     const activeItem = document.querySelector('.main-navigation__item--active');
 
     evt.preventDefault();
-    this._callback(evt.target.dataset.menuItem);
+    callback(evt.target.dataset.menuItem);
     activeItem.classList.remove('main-navigation__item--active');
     evt.target.classList.add('main-navigation__item--active');
   }
+
   resetMenuItemHandler(curentMenuItem) {
     const activeMenu = document.querySelector('.main-navigation__item--active');
     activeMenu.classList.remove('main-navigation__item--active');
@@ -47,7 +67,7 @@ export default class SiteMenu extends AbstractView {
   }
 
   setMenuItemChangeHandler(callback) {
-    this._callback = callback;
-    this.getElement().addEventListener('click', this._menuItemChangeHandler);
+    // this._callback = callback;
+    this.getElement().addEventListener('click', (e) => this._menuItemChangeHandler(e, callback));
   }
 }
