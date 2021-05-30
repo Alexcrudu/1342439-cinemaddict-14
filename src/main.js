@@ -1,31 +1,53 @@
 import UserNameView from './view/username.js';
 import AllFilmsView from './view/all-films';
-import { generateFilmCard } from './mock/film-card';
-
-import { renderElement } from './utils/functions.js';
+// import { generateFilmCard } from './mock/film-card';
+import Api from './api.js';
+import { RenderPosition , remove, renderElement } from './utils/functions.js';
 import BoardPresenter from './presenter/board.js';
 import FilmsModel from './model/films-model.js';
+import LoadingView from './view/loading.js';
 
-const FILMS_COUNT = 22;
+// this._loadingComponent = new LoadingView();
 
-const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
 
+// const FILMS_COUNT = 22;
+const AUTHORIZATION = 'Basic QWERT%$#@!!@#$%TREWQ';
+const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 const siteHeader = document.querySelector('.header');
+const siteFooter = document.querySelector('.footer');
 
-renderElement(siteHeader, new UserNameView().getElement());
+// renderLoading() {
+//   renderElement(this._boardContainer, new LoadingView.getElement(), RenderPosition.AFTERBEGIN);
+// }
+
+
+// const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
+
+// const siteHeader = document.querySelector('.header');
+
+// renderElement(siteHeader, new UserNameView().getElement());
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
+// filmsModel.setFilms(films);
 
 
 const siteMain = document.querySelector('.main');
 
-const boardPresenter = new BoardPresenter(siteMain, filmsModel);
+const boardPresenter = new BoardPresenter(siteMain, filmsModel, api);
 
-boardPresenter.init();
+// const siteFooter = document.querySelector('.footer');
 
+const loadingComponent = new LoadingView();
 
-const siteFooter = document.querySelector('.footer');
+renderElement(siteHeader, loadingComponent.getElement(), RenderPosition.AFTERBEGIN);
+api.getFilms()
+  .then((films) => {
+    filmsModel.setFilms(films);
+    remove(loadingComponent);
 
-renderElement(siteFooter, new AllFilmsView().getElement());
+    renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
+    renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+    boardPresenter.init();
+  });
 

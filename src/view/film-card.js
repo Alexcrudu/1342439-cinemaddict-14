@@ -9,7 +9,7 @@ export default class FilmCardItem extends AbstractView {
   }
 
   getTemplate() {
-    const {poster, filmName, rating, year, duration, genre, description, comments, isWishList, watched, isFavorite} = this._film;
+    const {poster, filmName, rating, year, duration, genre, description, comments, commentsLength, isWishList, watched, isFavorite} = this._film;
 
     const isWishListClassName = isWishList ? 'film-card__controls-item--active' : '';
 
@@ -27,7 +27,7 @@ export default class FilmCardItem extends AbstractView {
     </p>
     <img src=${poster} alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <a class="film-card__comments">${comments.length}</a>
+    <a class="film-card__comments">${commentsLength}</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWishListClassName}" type="button">Add to watchlist</button>
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatchedListClassName}" type="button">Mark as watched</button>

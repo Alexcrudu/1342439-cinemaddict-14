@@ -32,6 +32,8 @@ export default class FilmPopup extends SmartView {
       }
     };
 
+    console.log('wishlist', isWishListChecked);
+
     return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -114,7 +116,6 @@ export default class FilmPopup extends SmartView {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-
           ${this._getCommentTemplate(comments)}
         </ul>
 
@@ -150,27 +151,30 @@ export default class FilmPopup extends SmartView {
       </section>
     </div>
   </form>
-</section>`;
+    </section>`;
   }
 
   _getCommentTemplate (comments) {
-    return comments.map((comment) => {
-      this._comment = comment;
-      return `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${comment.comment}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">Tim Macoveev</span>
-          <span class="film-details__comment-day">${comment.date} </span>
-          <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`;
+    let commentsTags = '';
+    comments.forEach((comment) => {
+      if (comment.id) {
+        commentsTags += `<li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${comment.comment}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">Tim Macoveev</span>
+            <span class="film-details__comment-day">${comment.date} </span>
+            <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`;
+      }
     });
 
+    return commentsTags;
   }
 
   updateComments(data) {
@@ -243,11 +247,13 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
-      // const text = addCommentText.value;
 
       const emoji = addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0];
       const addCommentObj = generateCommentMock(emoji , addCommentText.value);
-      this._callback(addCommentObj);
+      this._data.comments.push(addCommentObj);
+
+      this.updateComments(this._data.comments);
+      //this._callback(addCommentObj);
     }
 
     this._scrollToEmoji();
