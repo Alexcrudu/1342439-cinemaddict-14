@@ -8,7 +8,7 @@ export default class FilmPopup extends SmartView {
     super();
     this._data = film;
     this._eventHandler = this._eventHandler.bind(this);
-    this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
+    // this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
     this._commentAddClickHandler = this._commentAddClickHandler.bind(this);
@@ -210,13 +210,14 @@ export default class FilmPopup extends SmartView {
   }
 
   setDeleteHandler(callback) {
-    this._callback = callback;
+    // this._callback = callback;
     const deleteButtons = this.getElement().querySelectorAll('.film-details__comment-delete');
     deleteButtons.forEach((button) => button.addEventListener('click', (e) => this._eventHandlerDelete(e, callback)));
   }
 
 
   _clickHandler(evt, callback) {
+    debugger
     evt.preventDefault();
     callback(this._data);
   }
@@ -277,19 +278,19 @@ export default class FilmPopup extends SmartView {
 
   setWatchListClickHandler(callback) {
     // debugger
-    // callback = callback;
+    this._callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
     watchList.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
-    // this._callback = callback;
+    this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-details__control-input--watched');
     watchedFilm.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
-    // this._callback = callback;
+    this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
     favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
   }

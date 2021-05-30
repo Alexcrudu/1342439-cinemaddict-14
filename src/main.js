@@ -40,14 +40,19 @@ const boardPresenter = new BoardPresenter(siteMain, filmsModel, api);
 
 const loadingComponent = new LoadingView();
 
-renderElement(siteHeader, loadingComponent.getElement(), RenderPosition.AFTERBEGIN);
+
+renderElement(siteMain, loadingComponent.getElement(), RenderPosition.BEFOREEND);
+
+renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(films);
     remove(loadingComponent);
+    renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.BEFOREEND);
 
-    renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
-    renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+    // renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
+    // renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
     boardPresenter.init();
   });
 
