@@ -1,6 +1,5 @@
 import Observer from '../utils/observer.js';
 import {getRandomInteger} from '../utils/functions.js';
-// import Comments from './comments-model.js';
 
 export default class Films extends Observer {
   constructor() {
@@ -64,10 +63,9 @@ export default class Films extends Observer {
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
 
-    // console.log('adaptedFilm: ', adaptedFilm);
-
     return adaptedFilm;
   }
+
 
   static adaptFilmToServer (film) {
     const adaptedFilm = Object.assign(

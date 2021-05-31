@@ -12,12 +12,6 @@ export default class Statistic {
   constructor(statisticContainer) {
     this._statisticContainer = statisticContainer;
 
-    // this._statisticSectionViewComponent = null;
-    // this._statisticRankViewComponent = null;
-    // this._statisticFiltersViewComponent = null;
-    // this._statisticsViewComponent = null;
-    // this._statisticTextViewComponent = null;
-
     this._handleStatFilterChange = this._handleStatFilterChange.bind(this);
   }
 

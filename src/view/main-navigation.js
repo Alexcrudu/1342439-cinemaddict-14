@@ -33,18 +33,15 @@ export default class SiteMenu extends AbstractView {
   }
 
   statisticClickHandler(callback) {
-    // this._callback = callback;
     const statistic = this.getElement().querySelector('.main-navigation__additional');
     statistic.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
   _menuItemChangeHandler(evt, callback) {
-    //ßdebugger
     if (evt.target.tagName !== 'A') {
       return;
     }
 
-    //const statistic = this.getElement().querySelector('.main-navigation__additional');
 
     if (evt.target.classList.contains('main-navigation__additional')) {
       return;
@@ -66,7 +63,6 @@ export default class SiteMenu extends AbstractView {
   }
 
   setMenuItemChangeHandler(callback) {
-    // this._callback = callback;
     this.getElement().addEventListener('click', (e) => this._menuItemChangeHandler(e, callback));
   }
 }

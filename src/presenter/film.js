@@ -1,18 +1,13 @@
 import FilmCardItemView from '../view/film-card';
 import FilmPopupView from '../view/film-popup.js';
-// import { generateCommentMock } from '../mock/comments.js';
 import CommentsModel from '../model/comments-model.js';
 import { renderElement, remove, RenderPosition, getUtcDateNow} from '../utils/functions.js';
 import Api from '../api.js';
 
-// const MAX_COMMENTS = 10;
-// const RANDOM_COMMENTS = new Array(getRandomInteger(1, MAX_COMMENTS)).fill().map(generateCommentMock);
 const commentsModel = new CommentsModel();
 const AUTHORIZATION = 'Basic QWERT%$#@!!@#$%TREWQ';
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 const api = new Api(END_POINT, AUTHORIZATION);
-// commentsModel.setComments(RANDOM_COMMENTS);
-
 
 export default class FilmCard {
   constructor(filmListContainer, changeData) {
@@ -25,7 +20,6 @@ export default class FilmCard {
   }
 
   init(container, film) {
-
     this._film = film;
     this._film.commentsLength = film.comments.length;
     this._film.comments = [];
@@ -117,8 +111,6 @@ export default class FilmCard {
       this._resetListeners();
     });
 
-
-    //this._filmPopupComponent.setCommentAddClickHandler(this._handleCommentAddClick);
   }
 
   _handleCommentAddClick(comment) {

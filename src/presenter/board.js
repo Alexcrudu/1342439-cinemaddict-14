@@ -1,17 +1,9 @@
 import SiteMenuView from '../view/main-navigation';
-// import UserNameView from './view/username.js';
-// import AllFilmsView from './view/all-films';
 import MainSortView from '../view/sort';
 import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-// import LoadingView from '../view/loading.js';
-// import StatisticsView from '../view/statistic.js';
-// import StatisticFiltersView from '../view/statistic-filters';
-// import StatisticRankView from '../view/statistic-rank';
-// import StatisticSectionView from '../view/statistic-section';
-// import StatisticTextView from '../view/statistic-text';
 import { renderElement, remove, RenderPosition, sortByDate, sortByRating} from '../utils/functions.js';
 import { SortType, UpdateType, MenuItem} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
@@ -20,8 +12,6 @@ import Statistic from './statistic-presenter.js';
 
 
 const FILMS_COUNT_PER_STEP = 5;
-// const siteHeader = document.querySelector('.header');
-// const siteFooter = document.querySelector('.footer');
 
 
 export default class Board {
@@ -30,7 +20,6 @@ export default class Board {
     this._filmsModel = filmsModel;
     this._api = api;
     this._isLoading = true;
-    // this._commentsModel = commentsModel;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;
@@ -44,12 +33,8 @@ export default class Board {
     this._topRatedComponent = new TopRatedView();
     this._mostCommentedComponent = new MostCommentedView();
     this._filmComponent = new FilmCardPresenter();
-    // this._loadingComponent = new LoadingView();
-    // this._statisticsViewComponent = new StatisticsView(this._getFilms());
-    // this._statisticRankViewComponent = new StatisticRankView();
-    // this._statisticFilterViewComponent = new StatisticFiltersView();
-    // this._statisticTextComponent = new StatisticTextView(this._getFilms());
-    // this._statisticSectionViewComponent = new StatisticSectionView();
+
+
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
@@ -65,7 +50,6 @@ export default class Board {
     this._films = this._filmsModel.getFilms();
     this._siteMenuComponent = new SiteMenuView(this._films);
     this._renderBoard();
-    // this._setFilms();
   }
 
   _getFilms() {
@@ -85,7 +69,6 @@ export default class Board {
     this._mostCommentedComponent.show();
     this._topRatedComponent.show();
     this._sortComponent.show();
-    // this._statisticPresenter.removeStatistic();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const allFilms = this._getFilms();
     const wishListFilms = allFilms.filter((film) => film.isWishList);
@@ -138,7 +121,6 @@ export default class Board {
     this._topRatedComponent.hide();
     this._sortComponent.hide();
     this._statisticPresenter = new Statistic(this._boardContainer);
-    // debugger
     this._statisticPresenter.init(this._getFilms());
   }
 
@@ -273,25 +255,18 @@ export default class Board {
     this._renderFilms(this._renderedFilmCount, newRenderedFilmCount);
     this._renderedFilmCount = newRenderedFilmCount;
 
-    if (this._renderedFilmCount >= filmCount) {
+    if (this._renderedFilmCount >= this._films.length) {
       remove(this._showMoreButtonComponent);
     }
+
+    // if(this._films.length === 0) {
+    //   remove(this._showMoreButtonComponent);
+    //   this._renderNoFilms();
+    // }
   }
 
   _renderLoading() {
     renderElement(this._boardContainer, this._loadingComponent.getElement(), RenderPosition.AFTERBEGIN);
-  }
-
-  _setFilms() {
-    // this._renderLoading();
-    // this._api.getFilms()
-    //   .then((films) => {
-    //     this._filmsModel.setFilms(films);
-    //     remove(this._loadingComponent);
-    //     this._renderBoard();
-    //     renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
-    //     renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
-    //   });
   }
 
 
@@ -303,18 +278,15 @@ export default class Board {
     this._renderSort();
 
     this._renderSiteList();
-
-
-    if(this._getFilms().length === 0) {
+    if(this._films.length === 0) {
       remove(this._showMoreButtonComponent);
       this._renderNoFilms();
     }
 
-    // const filmCount = this._getFilms().length;
 
-    // const films = this._getFilms();
     this._renderFilms( 0, Math.min(this._films.length, this._renderedFilmCount));
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+
 
     if (this._films.length > this._renderedFilmCount) {
       this._renderShowMoreButton();

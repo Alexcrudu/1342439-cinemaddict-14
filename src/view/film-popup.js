@@ -32,8 +32,6 @@ export default class FilmPopup extends SmartView {
       }
     };
 
-    console.log('wishlist', isWishListChecked);
-
     return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -210,14 +208,12 @@ export default class FilmPopup extends SmartView {
   }
 
   setDeleteHandler(callback) {
-    // this._callback = callback;
     const deleteButtons = this.getElement().querySelectorAll('.film-details__comment-delete');
     deleteButtons.forEach((button) => button.addEventListener('click', (e) => this._eventHandlerDelete(e, callback)));
   }
 
 
   _clickHandler(evt, callback) {
-    debugger
     evt.preventDefault();
     callback(this._data);
   }
