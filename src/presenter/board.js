@@ -72,7 +72,7 @@ export default class Board {
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const allFilms = this._getFilms();
     const wishListFilms = allFilms.filter((film) => film.isWishList);
-    const watchedFilms = allFilms.filter((film) =>film.watched);
+    const watchedFilms = allFilms.filter((film) =>film.watched.already_watched);
     const favoriteFilms = allFilms.filter((film) =>film.isFavorite);
     switch (this._currentMenuItem) {
       case MenuItem.WATCHLIST :
@@ -101,6 +101,11 @@ export default class Board {
         this._clearFilmList();
         this._renderFilms(0, this._renderedFilmCount);
     }
+    if (this._renderedFilmCount >= this._films.length) {
+      this._showMoreButtonComponent.hide();
+    } else {
+      this._showMoreButtonComponent.show();
+    }
   }
 
 
@@ -116,10 +121,11 @@ export default class Board {
 
   _handleStatistics (){
     this._siteListComponent.hide();
-    this._showMoreButtonComponent.hide();
     this._mostCommentedComponent.hide();
     this._topRatedComponent.hide();
     this._sortComponent.hide();
+    this._currentMenuItem = MenuItem.ALL;
+    this._showMoreButtonComponent.hide();
     this._statisticPresenter = new Statistic(this._boardContainer);
     this._statisticPresenter.init(this._getFilms());
   }
@@ -159,7 +165,10 @@ export default class Board {
   _handleFilmChange( update) {
     this._api.updateFilm(update).then(() => {
       this._filmsModel.updateFilm(update);
-    });
+    })
+      .catch((ex) => {
+        alert('Update failed: ', ex);
+      });
     this._films = this._filmsModel.getFilms();
     this._clearFilmList();
     this._renderFilms(0, Math.min(this._films.length, this._renderedFilmCount));
@@ -202,6 +211,7 @@ export default class Board {
   _renderShowMoreButton () {
     const template = this._showMoreButtonComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
+
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }

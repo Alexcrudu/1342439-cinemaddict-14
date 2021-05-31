@@ -8,7 +8,6 @@ export default class FilmPopup extends SmartView {
     super();
     this._data = film;
     this._eventHandler = this._eventHandler.bind(this);
-    // this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
     this._commentAddClickHandler = this._commentAddClickHandler.bind(this);
@@ -163,7 +162,7 @@ export default class FilmPopup extends SmartView {
         <div>
           <p class="film-details__comment-text">${comment.comment}</p>
           <p class="film-details__comment-info">
-            <span class="film-details__comment-author">Tim Macoveev</span>
+            <span class="film-details__comment-author">${comment.author} </span>
             <span class="film-details__comment-day">${comment.date} </span>
             <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
           </p>

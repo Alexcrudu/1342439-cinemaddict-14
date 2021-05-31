@@ -104,19 +104,31 @@ export default class FilmCard {
 
 
     this._filmPopupComponent.setDeleteHandler((id) => {
-      this._comments.deleteComment(id);
-      this._film.comments = this._comments.getComments();
-      this._filmPopupComponent.updateComments(this._film.comments);
-      this._filmPopupComponent.restoreHandlers();
-      this._resetListeners();
+      api.deleteComment(id)
+        .then(() => {
+          this._comments.deleteComment(id);
+          this._film.comments = this._comments.getComments();
+          this._filmPopupComponent.updateComments(this._film.comments);
+          this._filmPopupComponent.restoreHandlers();
+          this._resetListeners();
+        })
+        .catch(() => {
+          this._filmPopupComponent.shake(true);
+          alert('Error! Comment not deleted');
+        });
     });
-
   }
 
   _handleCommentAddClick(comment) {
-    this._film.comments.push(comment);
-
-    this._filmPopupComponent.updateComments(this._film.comments);
+    api.addComment(this._renderedFilm.id, comment)
+      .then(() =>{
+        this._film.comments.push(comment);
+        this._filmPopupComponent.updateComments(this._film.comments);
+      })
+      .catch(() => {
+        this._filmPopupComponent.shake(true);
+        alert('Error! Comment not added!');
+      });
   }
 
 

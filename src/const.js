@@ -9,6 +9,7 @@ export const MenuItem = {
   WATCHLIST: 'Watchlist',
   HISTORY: 'History',
   FAVORITES: 'Favorites',
+  STATS: 'Stats',
 };
 
 export const UpdateType = {

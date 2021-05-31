@@ -2,7 +2,7 @@ import UserNameView from './view/username.js';
 import AllFilmsView from './view/all-films';
 // import { generateFilmCard } from './mock/film-card';
 import Api from './api.js';
-import { RenderPosition , remove, renderElement } from './utils/functions.js';
+import { RenderPosition , remove, renderElement, getProfileRating} from './utils/functions.js';
 import BoardPresenter from './presenter/board.js';
 import FilmsModel from './model/films-model.js';
 import LoadingView from './view/loading.js';
@@ -40,19 +40,27 @@ const boardPresenter = new BoardPresenter(siteMain, filmsModel, api);
 
 const loadingComponent = new LoadingView();
 
+const renderRating = (films) => {
+
+  const watchedFilmsCount = films.filter((film) => film.watched.already_watched).length;
+
+  renderElement(siteHeader, new UserNameView(getProfileRating(watchedFilmsCount)).getElement(), RenderPosition.BEFOREEND);
+};
+
 
 renderElement(siteMain, loadingComponent.getElement(), RenderPosition.BEFOREEND);
 
-renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+// renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
 
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(films);
     remove(loadingComponent);
-    renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.BEFOREEND);
+    renderRating(films);
 
     // renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
     // renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
     boardPresenter.init();
+    renderElement(siteFooter, new AllFilmsView(films).getElement(), RenderPosition.BEFOREEND);
   });
 
