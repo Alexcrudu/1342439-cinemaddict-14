@@ -23,28 +23,31 @@ export default class SiteMenu extends AbstractView {
       <a href="#history" data-menu-item =${MenuItem.HISTORY} class="main-navigation__item">History <span class="main-navigation__item-count">${watchedFilmsCount}</span></a>
       <a href="#favorites" data-menu-item =${MenuItem.FAVORITES} class="main-navigation__item">Favorites <span class="main-navigation__item-count">${filtredFilmsCount}</span></a>
     </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
+    <a href="#stats" data-menu-item =${MenuItem.STATS} class="main-navigation__additional">Stats</a>
   </nav>`;
   }
 
   _clickHandler(evt, callback) {
+    const activeItem = document.querySelector('.main-navigation__item--active');
+    const statistic = this.getElement().querySelector('.main-navigation__additional');
     evt.preventDefault();
+    activeItem.classList.remove('main-navigation__item--active');
+    statistic.classList.toggle('main-navigation__additional--active');
+    // const menuDataset = document.querySelector(`[data-menu-item = '${MenuItem.ALL}']`);
+    // menuDataset.classList.toggle('main-navigation__item--active');
     callback();
   }
 
   statisticClickHandler(callback) {
-    // this._callback = callback;
     const statistic = this.getElement().querySelector('.main-navigation__additional');
     statistic.addEventListener('click', (e) => this._clickHandler(e, callback));
   }
 
   _menuItemChangeHandler(evt, callback) {
-    //ßdebugger
     if (evt.target.tagName !== 'A') {
       return;
     }
 
-    //const statistic = this.getElement().querySelector('.main-navigation__additional');
 
     if (evt.target.classList.contains('main-navigation__additional')) {
       return;
@@ -54,20 +57,22 @@ export default class SiteMenu extends AbstractView {
 
     evt.preventDefault();
     callback(evt.target.dataset.menuItem);
-    activeItem.classList.remove('main-navigation__item--active');
+    if (activeItem) {
+      activeItem.classList.remove('main-navigation__item--active');
+    }
     evt.target.classList.add('main-navigation__item--active');
   }
 
   resetMenuItemHandler(curentMenuItem) {
     const activeMenu = document.querySelector('.main-navigation__item--active');
-    activeMenu.classList.remove('main-navigation__item--active');
-    const menuDataset = document.querySelector(`[data-menu-item = ${curentMenuItem}]`);
-    menuDataset.classList.add('main-navigation__item--active');
-
+    if (activeMenu) {
+      activeMenu.classList.remove('main-navigation__item--active');
+    }
+    const menuDataset = document.querySelector(`[data-menu-item='${curentMenuItem}']`);
+    if (menuDataset) menuDataset.classList.add('main-navigation__item--active');
   }
 
   setMenuItemChangeHandler(callback) {
-    // this._callback = callback;
     this.getElement().addEventListener('click', (e) => this._menuItemChangeHandler(e, callback));
   }
 }

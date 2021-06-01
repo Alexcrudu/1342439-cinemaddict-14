@@ -1,31 +1,66 @@
 import UserNameView from './view/username.js';
 import AllFilmsView from './view/all-films';
-import { generateFilmCard } from './mock/film-card';
-
-import { renderElement } from './utils/functions.js';
+// import { generateFilmCard } from './mock/film-card';
+import Api from './api.js';
+import { RenderPosition , remove, renderElement, getProfileRating} from './utils/functions.js';
 import BoardPresenter from './presenter/board.js';
 import FilmsModel from './model/films-model.js';
+import LoadingView from './view/loading.js';
 
-const FILMS_COUNT = 22;
+// this._loadingComponent = new LoadingView();
 
-const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
 
+// const FILMS_COUNT = 22;
+const AUTHORIZATION = 'Basic QWERT%$#@!!@#$%TREWQ';
+const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 const siteHeader = document.querySelector('.header');
+const siteFooter = document.querySelector('.footer');
 
-renderElement(siteHeader, new UserNameView().getElement());
+// renderLoading() {
+//   renderElement(this._boardContainer, new LoadingView.getElement(), RenderPosition.AFTERBEGIN);
+// }
+
+
+// const films = new Array(FILMS_COUNT).fill().map(generateFilmCard);
+
+// const siteHeader = document.querySelector('.header');
+
+// renderElement(siteHeader, new UserNameView().getElement());
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
+// filmsModel.setFilms(films);
 
 
 const siteMain = document.querySelector('.main');
 
-const boardPresenter = new BoardPresenter(siteMain, filmsModel);
+const boardPresenter = new BoardPresenter(siteMain, filmsModel, api);
 
-boardPresenter.init();
+// const siteFooter = document.querySelector('.footer');
+
+const loadingComponent = new LoadingView();
+
+const renderRating = (films) => {
+
+  const watchedFilmsCount = films.filter((film) => film.watched.already_watched).length;
+
+  renderElement(siteHeader, new UserNameView(getProfileRating(watchedFilmsCount)).getElement(), RenderPosition.BEFOREEND);
+};
 
 
-const siteFooter = document.querySelector('.footer');
+renderElement(siteMain, loadingComponent.getElement(), RenderPosition.BEFOREEND);
 
-renderElement(siteFooter, new AllFilmsView().getElement());
+// renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+
+api.getFilms()
+  .then((films) => {
+    filmsModel.setFilms(films);
+    remove(loadingComponent);
+    renderRating(films);
+
+    // renderElement(siteHeader, new UserNameView().getElement(), RenderPosition.AFTERBEGIN);
+    // renderElement(siteFooter, new AllFilmsView().getElement(), RenderPosition.BEFOREEND);
+    boardPresenter.init();
+    renderElement(siteFooter, new AllFilmsView(films).getElement(), RenderPosition.BEFOREEND);
+  });
 

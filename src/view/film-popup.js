@@ -8,7 +8,6 @@ export default class FilmPopup extends SmartView {
     super();
     this._data = film;
     this._eventHandler = this._eventHandler.bind(this);
-    this._eventHandlerDelete = this._eventHandlerDelete.bind(this);
     this._container = document.querySelector('body');
     this._commentEmojiClickHandler = this._commentEmojiClickHandler.bind(this);
     this._commentAddClickHandler = this._commentAddClickHandler.bind(this);
@@ -114,7 +113,6 @@ export default class FilmPopup extends SmartView {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-
           ${this._getCommentTemplate(comments)}
         </ul>
 
@@ -150,27 +148,30 @@ export default class FilmPopup extends SmartView {
       </section>
     </div>
   </form>
-</section>`;
+    </section>`;
   }
 
   _getCommentTemplate (comments) {
-    return comments.map((comment) => {
-      this._comment = comment;
-      return `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${comment.comment}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">Tim Macoveev</span>
-          <span class="film-details__comment-day">${comment.date} </span>
-          <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`;
+    let commentsTags = '';
+    comments.forEach((comment) => {
+      if (comment.id) {
+        commentsTags += `<li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji-smile">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${comment.comment}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">${comment.author} </span>
+            <span class="film-details__comment-day">${comment.date} </span>
+            <button data-id = "${comment.id}"class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`;
+      }
     });
 
+    return commentsTags;
   }
 
   updateComments(data) {
@@ -206,7 +207,6 @@ export default class FilmPopup extends SmartView {
   }
 
   setDeleteHandler(callback) {
-    this._callback = callback;
     const deleteButtons = this.getElement().querySelectorAll('.film-details__comment-delete');
     deleteButtons.forEach((button) => button.addEventListener('click', (e) => this._eventHandlerDelete(e, callback)));
   }
@@ -243,11 +243,13 @@ export default class FilmPopup extends SmartView {
       if(addCommentText.value.trim() === '') {
         return;
       }
-      // const text = addCommentText.value;
 
       const emoji = addCommentEmotion.firstChild.src.split('\\').pop().split('/').pop().split('.')[0];
       const addCommentObj = generateCommentMock(emoji , addCommentText.value);
-      this._callback(addCommentObj);
+      this._data.comments.push(addCommentObj);
+
+      this.updateComments(this._data.comments);
+      //this._callback(addCommentObj);
     }
 
     this._scrollToEmoji();
@@ -271,19 +273,19 @@ export default class FilmPopup extends SmartView {
 
   setWatchListClickHandler(callback) {
     // debugger
-    // callback = callback;
+    this._callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
     watchList.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setWatchedClickHandler(callback) {
-    // this._callback = callback;
+    this._callback = callback;
     const watchedFilm = this.getElement().querySelector('.film-details__control-input--watched');
     watchedFilm.addEventListener('change', (e) => this._clickHandler(e, callback));
   }
 
   setFavoriteClickHandler(callback) {
-    // this._callback = callback;
+    this._callback = callback;
     const favorite = this.getElement().querySelector('.film-details__control-input--favorite');
     favorite.addEventListener('change', (e) => this._clickHandler(e, callback));
   }

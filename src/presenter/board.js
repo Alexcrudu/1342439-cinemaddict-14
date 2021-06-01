@@ -4,11 +4,6 @@ import FilmsListView from '../view/films';
 import ShowMoreFilmsButtonView from '../view/show-more-button';
 import TopRatedView from '../view/top-rated-films';
 import MostCommentedView from '../view/most-commented-films';
-// import StatisticsView from '../view/statistic.js';
-// import StatisticFiltersView from '../view/statistic-filters';
-// import StatisticRankView from '../view/statistic-rank';
-// import StatisticSectionView from '../view/statistic-section';
-// import StatisticTextView from '../view/statistic-text';
 import { renderElement, remove, RenderPosition, sortByDate, sortByRating} from '../utils/functions.js';
 import { SortType, UpdateType, MenuItem} from '../const.js';
 import NoFilmsView from '../view/no-films.js';
@@ -20,10 +15,11 @@ const FILMS_COUNT_PER_STEP = 5;
 
 
 export default class Board {
-  constructor(boardContainer, filmsModel) {
+  constructor(boardContainer, filmsModel, api) {
     this._boardContainer = boardContainer;
     this._filmsModel = filmsModel;
-    // this._commentsModel = commentsModel;
+    this._api = api;
+    this._isLoading = true;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._renderedFilmList = {};
     this._currentSort = SortType.DEFAULT;
@@ -37,11 +33,8 @@ export default class Board {
     this._topRatedComponent = new TopRatedView();
     this._mostCommentedComponent = new MostCommentedView();
     this._filmComponent = new FilmCardPresenter();
-    // this._statisticsViewComponent = new StatisticsView(this._getFilms());
-    // this._statisticRankViewComponent = new StatisticRankView();
-    // this._statisticFilterViewComponent = new StatisticFiltersView();
-    // this._statisticTextComponent = new StatisticTextView(this._getFilms());
-    // this._statisticSectionViewComponent = new StatisticSectionView();
+
+
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
@@ -55,7 +48,7 @@ export default class Board {
   init() {
     this._filmComponent = new FilmCardPresenter();
     this._films = this._filmsModel.getFilms();
-    this._siteMenuComponent = new SiteMenuView(this._filmsModel.getFilms());
+    this._siteMenuComponent = new SiteMenuView(this._films);
     this._renderBoard();
   }
 
@@ -76,11 +69,10 @@ export default class Board {
     this._mostCommentedComponent.show();
     this._topRatedComponent.show();
     this._sortComponent.show();
-    // this._statisticPresenter.removeStatistic();
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     const allFilms = this._getFilms();
     const wishListFilms = allFilms.filter((film) => film.isWishList);
-    const watchedFilms = allFilms.filter((film) =>film.watched);
+    const watchedFilms = allFilms.filter((film) =>film.watched.already_watched);
     const favoriteFilms = allFilms.filter((film) =>film.isFavorite);
     switch (this._currentMenuItem) {
       case MenuItem.WATCHLIST :
@@ -109,6 +101,11 @@ export default class Board {
         this._clearFilmList();
         this._renderFilms(0, this._renderedFilmCount);
     }
+    if (this._renderedFilmCount >= this._films.length) {
+      this._showMoreButtonComponent.hide();
+    } else {
+      this._showMoreButtonComponent.show();
+    }
   }
 
 
@@ -124,12 +121,12 @@ export default class Board {
 
   _handleStatistics (){
     this._siteListComponent.hide();
-    this._showMoreButtonComponent.hide();
     this._mostCommentedComponent.hide();
     this._topRatedComponent.hide();
     this._sortComponent.hide();
+    this._currentMenuItem = MenuItem.ALL;
+    this._showMoreButtonComponent.hide();
     this._statisticPresenter = new Statistic(this._boardContainer);
-    // debugger
     this._statisticPresenter.init(this._getFilms());
   }
 
@@ -166,7 +163,12 @@ export default class Board {
 
 
   _handleFilmChange( update) {
-    this._filmsModel.updateFilm(update);
+    this._api.updateFilm(update).then(() => {
+      this._filmsModel.updateFilm(update);
+    })
+      .catch((ex) => {
+        alert('Update failed: ', ex);
+      });
     this._films = this._filmsModel.getFilms();
     this._clearFilmList();
     this._renderFilms(0, Math.min(this._films.length, this._renderedFilmCount));
@@ -209,6 +211,7 @@ export default class Board {
   _renderShowMoreButton () {
     const template = this._showMoreButtonComponent.getElement();
     renderElement(this._boardContainer, template, RenderPosition.BEFOREEND);
+
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
@@ -262,14 +265,22 @@ export default class Board {
     this._renderFilms(this._renderedFilmCount, newRenderedFilmCount);
     this._renderedFilmCount = newRenderedFilmCount;
 
-    if (this._renderedFilmCount >= filmCount) {
+    if (this._renderedFilmCount >= this._films.length) {
       remove(this._showMoreButtonComponent);
     }
+
+    // if(this._films.length === 0) {
+    //   remove(this._showMoreButtonComponent);
+    //   this._renderNoFilms();
+    // }
+  }
+
+  _renderLoading() {
+    renderElement(this._boardContainer, this._loadingComponent.getElement(), RenderPosition.AFTERBEGIN);
   }
 
 
   _renderBoard(){
-
     this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
 
     this._renderSiteMenu();
@@ -277,18 +288,15 @@ export default class Board {
     this._renderSort();
 
     this._renderSiteList();
-
-
-    if(this._getFilms().length === 0) {
+    if(this._films.length === 0) {
       remove(this._showMoreButtonComponent);
       this._renderNoFilms();
     }
 
-    // const filmCount = this._getFilms().length;
 
-    // const films = this._getFilms();
     this._renderFilms( 0, Math.min(this._films.length, this._renderedFilmCount));
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+
 
     if (this._films.length > this._renderedFilmCount) {
       this._renderShowMoreButton();
@@ -299,6 +307,6 @@ export default class Board {
 
     this._renderMostCommented();
 
-    // this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
   }
+
 }
