@@ -1,5 +1,6 @@
 import Observer from '../utils/observer.js';
 import {getRandomInteger} from '../utils/functions.js';
+import dayjs from 'dayjs';
 
 export default class Films extends Observer {
   constructor() {
@@ -55,7 +56,7 @@ export default class Films extends Observer {
         isFavorite: film.user_details.favorite,
         watched: {
           already_watched: film.user_details.already_watched,
-          watching_date: 'Date()',
+          watching_date: dayjs(film.user_details.watching_date).format,
         },
       },
     );

@@ -46,8 +46,9 @@ export default class Api {
   }
 
   getComments(filmId) {
-    if (!filmId) throw new Error('Film ID is mandatory');
-    else {
+    if (!filmId) {
+      throw new Error('Film ID is mandatory');
+    } else {
       return this._load({url: `comments/${filmId}`})
         .then(Api.toJSON)
         .then((comments) => {

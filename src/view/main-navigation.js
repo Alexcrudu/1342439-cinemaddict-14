@@ -31,10 +31,11 @@ export default class SiteMenu extends AbstractView {
     const activeItem = document.querySelector('.main-navigation__item--active');
     const statistic = this.getElement().querySelector('.main-navigation__additional');
     evt.preventDefault();
-    activeItem.classList.remove('main-navigation__item--active');
+    if(activeItem) {
+      activeItem.classList.remove('main-navigation__item--active');
+    }
+
     statistic.classList.toggle('main-navigation__additional--active');
-    // const menuDataset = document.querySelector(`[data-menu-item = '${MenuItem.ALL}']`);
-    // menuDataset.classList.toggle('main-navigation__item--active');
     callback();
   }
 
@@ -69,7 +70,9 @@ export default class SiteMenu extends AbstractView {
       activeMenu.classList.remove('main-navigation__item--active');
     }
     const menuDataset = document.querySelector(`[data-menu-item='${curentMenuItem}']`);
-    if (menuDataset) menuDataset.classList.add('main-navigation__item--active');
+    if (menuDataset) {
+      menuDataset.classList.add('main-navigation__item--active');
+    }
   }
 
   setMenuItemChangeHandler(callback) {

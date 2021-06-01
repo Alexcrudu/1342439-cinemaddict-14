@@ -205,6 +205,8 @@ export default class Board {
       film.index = index;
       this._renderFilm(film, index);
     });
+    this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
+
   }
 
 
@@ -268,11 +270,6 @@ export default class Board {
     if (this._renderedFilmCount >= this._films.length) {
       remove(this._showMoreButtonComponent);
     }
-
-    // if(this._films.length === 0) {
-    //   remove(this._showMoreButtonComponent);
-    //   this._renderNoFilms();
-    // }
   }
 
   _renderLoading() {

@@ -1,6 +1,5 @@
 import SmartView from './smart.js';
-import {generateCommentMock} from '../mock/comments.js';
-import {getHumanizeDuration} from '../utils/functions.js';
+import {getHumanizeDuration, generateCommentMock} from '../utils/functions.js';
 
 export default class FilmPopup extends SmartView {
   constructor(film)
@@ -249,7 +248,6 @@ export default class FilmPopup extends SmartView {
       this._data.comments.push(addCommentObj);
 
       this.updateComments(this._data.comments);
-      //this._callback(addCommentObj);
     }
 
     this._scrollToEmoji();
@@ -272,7 +270,6 @@ export default class FilmPopup extends SmartView {
 
 
   setWatchListClickHandler(callback) {
-    // debugger
     this._callback = callback;
     const watchList = this.getElement().querySelector('.film-details__control-input--watchlist');
     watchList.addEventListener('change', (e) => this._clickHandler(e, callback));

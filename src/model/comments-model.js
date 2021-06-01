@@ -42,7 +42,7 @@ export default class Comments extends Observer {
           comment: comment.comment,
           emoji: comment.emotion,
           author: comment.author,
-          date: new Date(comment.date),
+          date: new Date(),
         });
 
       delete adaptComment.emotion;

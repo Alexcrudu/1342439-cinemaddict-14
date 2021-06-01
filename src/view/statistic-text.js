@@ -26,7 +26,9 @@ const createStatisticTextTemplate = (films, genresCounts) => {
         max = val;
         return [key];
       }
-      if (val === max) a.push(key);
+      if (val === max) {
+        a.push(key);
+      }
       return a;
     }, []);
 

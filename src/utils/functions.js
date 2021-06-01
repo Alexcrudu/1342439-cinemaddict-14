@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
 import isToday from 'dayjs/plugin/isToday';
+import { nanoid } from 'nanoid';
 import objectSupport from 'dayjs/plugin/objectSupport';
 import AbstractView from '../view/abstract.js';
 import {StatFilters} from '../const.js';
@@ -127,6 +128,7 @@ export const getHumanizeDuration = (duration) => {
   return dayjs({ minute: duration }).format('H[h] m[m]');
 };
 
+
 export const getGenresCounts = (films) => {
   const allGenres = [];
   films.forEach((film) => {
@@ -156,4 +158,14 @@ export const getProfileRating = (countWatched) => {
   else if(countWatched > 20) {
     return 'movie buff';
   }
+};
+
+export const generateCommentMock = (commentEmotion,newCommentText) => {
+  return {
+    id: nanoid(),
+    comment:newCommentText,
+    emoji: commentEmotion,
+    author: 'author',
+    date: 'date',
+  };
 };

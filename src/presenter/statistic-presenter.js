@@ -82,7 +82,6 @@ export default class Statistic {
 
     remove(this._statisticsViewComponent);
     remove(this._statisticTextViewComponent);
-
     switch (statFilter) {
       case StatFilters.ALL:
         this._renderStatisticText(films);
