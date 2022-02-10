@@ -205,7 +205,6 @@ export default class Board {
       film.index = index;
       this._renderFilm(film, index);
     });
-    this._siteMenuComponent.statisticClickHandler(this._handleStatistics);
 
   }
 

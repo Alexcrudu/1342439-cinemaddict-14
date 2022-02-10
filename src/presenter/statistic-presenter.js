@@ -1,4 +1,4 @@
-import { getFilmsStatSorted, renderElement, RenderPosition, remove } from '../utils/functions.js';
+import { getFilmsStatSorted, renderElement, RenderPosition, remove, getProfileRating } from '../utils/functions.js';
 import { StatFilters } from '../const.js';
 
 
@@ -24,8 +24,8 @@ export default class Statistic {
       this._statisticSectionViewComponent.getElement(),
       RenderPosition.BEFOREEND,
     );
-
-    this._statisticRankViewComponent = new StatisticRankView();
+    const watchedFilmsCount = this._films.filter((film) => film.watched.already_watched).length;
+    this._statisticRankViewComponent = new StatisticRankView(getProfileRating(watchedFilmsCount));
     renderElement(
       this._statisticSectionViewComponent.getElement(),
       this._statisticRankViewComponent.getElement(),
